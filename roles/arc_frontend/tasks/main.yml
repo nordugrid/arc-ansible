@@ -1,0 +1,137 @@
+
+---
+# tasks file for ansible-role-arc-frontend
+
+
+## Load the correct defaults file
+##########
+
+- name: Prepare mounts for frontend
+  include: mounts.yml
+
+
+- name: Avoid filling up /var/log/secure with messages about ARC writing to /var/log/arc
+  copy:
+    src: files/etc/rsyslog.d/00-arc.conf
+    dest: /etc/rsyslog.d/00-arc.conf
+    
+
+- name: Restart rsyslog
+  systemd:
+    name: rsyslog
+    state: restarted
+
+
+##################################################
+## INSTALLATION AND CONFIGURATION OF ARC
+##################################################
+
+- name: Include installation play for standard installation from nordugrid repo (rhel)
+  include: install_arc_rhel.yml
+  tags: 
+    - installarc
+  when: ansible_os_family == "RedHat"
+
+- name: Include installation play for standard installation from nordugrid repo (deb)
+  include: install_arc_deb.yml
+  tags: 
+    - installarc
+  when: ansible_os_family == "Debian"
+
+- name: Template arc.conf (arc.conf.j2) file
+  template: 
+    backup: yes
+    src: arc.conf.j2
+    dest: /etc/arc.conf 
+    owner: root
+    group: root
+    mode: '0644'
+  tags: 
+    - installarc
+    - arcconf
+
+- name: Install igtf package (deb)
+  apt:
+    name: igtf-policy-*
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+
+- name: Install igtf package (deb)
+  apt:
+    name: fetch-crl
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+  ignore_errors: yes
+
+
+
+#- name: Install CA's
+#  shell: "arcctl deploy igtf-ca classic mics"
+
+- name: Run test-cert init
+  shell: "arcctl test-ca init -f -v 3600"
+
+- name: Run test-cert hostcert
+  shell: "arcctl test-ca hostcert -f -v 3600"
+
+- name: Run test-cert usercert install
+  shell: "arcctl test-ca usercert -i {{ default_user.user }} -f -v 3600"
+
+
+## Runtime dir
+###############
+
+- name: ATLAS specific RTEs
+  include: atlas.yml
+  tags:
+    - installarc
+    - runtime
+    - atlas
+    - atlas_frontend
+
+
+## Patch slurm submit script
+#############################
+
+- name: Install patch command
+  yum:
+    name: patch
+    state: present
+
+- name: Patch slurm submit script to include gres option
+  patch:
+    src: files/submit-SLURM-job.patch
+    dest: /usr/share/arc/submit-SLURM-job
+    backup: yes
+  when: grestypes_slurmconf is defined 
+
+## Attempt to start ARC
+##########################
+
+- name: Start ARC
+  shell: "arcctl service start -a"
+  ignore_errors: yes
+  
+
+#########################
+## Host certificate
+#########################
+- name: Prepare for host certificate
+  include: hostcert.yml
+  tags: certificate
+  when: (inventory_hostname in groups['frontend'])
+
+
+#########################
+## ARC test files
+#########################
+- name: Place testing scripts on frontend
+  include: arctesting.yml
+  tags: arctesting
+  when: (inventory_hostname in groups['frontend'])
+
+
+...

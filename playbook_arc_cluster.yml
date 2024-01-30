@@ -1,0 +1,148 @@
+---
+
+#########################################
+##    Some preps - PLAY 1
+#########################################
+
+- hosts: all
+  name: preps
+  gather_facts: yes
+  become: yes
+  tags: prepare
+
+  tasks:
+
+  - name: Clear cache
+    command: yum clean all
+    when: ansible_os_family == "RedHat"
+
+    
+  - name: Set correct timezone
+    shell: timedatectl set-timezone Europe/Oslo
+
+
+  - name: Enable crb repo (el9)
+    shell: dnf config-manager --set-enabled crb
+    when: (ansible_os_family == "RedHat")  and ansible_distribution_major_version|int == 9
+
+
+  - name: Enable powertools repo (el8)
+    shell: dnf config-manager --set-enabled powertools
+    when: (ansible_os_family == "RedHat") and ansible_distribution_major_version|int == 8
+
+
+  - name: Install emacs, wget, development tools  rhel
+    package:
+      name: ['emacs', 'wget', '@Development tools']
+      disablerepo: "nordugrid*"
+      state: present
+    when: (ansible_os_family == "RedHat") 
+    ignore_errors: yes
+
+
+
+  - name: Install chrony, dnf-automatic (rhel 9)
+    package:
+      name: ['chrony','dnf-automatic']
+      state: present
+      disablerepo: "nordugrid*"	
+    when: (ansible_os_family == "RedHat")  and ansible_distribution_major_version|int == 9
+
+
+  - name: Install ntp, yum-cron (rhel 7)
+    package:
+      name: ['ntp','yum-cron']
+      disablerepo: "nordugrid*"
+      state: present
+    when: (ansible_os_family == "RedHat")  and ansible_distribution_major_version|int == 7 
+
+
+  - name: Start and enable chronyd, dnf-automatic (el8/9)
+    systemd:
+      name: "{{ item }}"
+      enabled: yes
+      state: started
+    when: (ansible_os_family == "RedHat")  and ansible_distribution_major_version|int > 7
+    with_items:
+      - chronyd
+      - dnf-automatic.timer
+
+
+  - name: Start and enable yum-cron (el7)
+    systemd:
+      name: yum-cron
+      enabled: yes
+      state: started
+    when: (ansible_os_family == "RedHat")  and ansible_distribution_major_version|int == 7 
+
+
+
+  - name: Update system if deb
+    shell: apt-get update -y
+    when: ansible_os_family == "Debian"
+
+
+  - name: Install emacs, wget, ntp (deb)
+    package:
+      name: ['emacs', 'wget', 'ntp','unattended-upgrades']
+      disablerepo: "nordugrid*"
+      state: present
+    when: ansible_os_family == "Debian"
+
+
+  - name: Start and enable unattended-upgrades (debian)
+    systemd:
+      name: unattended-upgrades
+      enabled: yes
+      state: started
+    when: ansible_os_family == "Debian"
+  
+
+  - name: Start ntp and yum-cron (el == 7)
+    systemd:
+      name: "{{ item }}"
+      enabled: yes
+      state: started
+    when: (ansible_os_family == "RedHat") and ansible_distribution_major_version|int == 7
+    with_items:
+      - ntpd
+      - yum-cron
+
+  - name: Start ntp (debian)
+    systemd:
+      name: ntp
+      enabled: yes
+      state: started
+    when: ansible_os_family == "Debian"
+
+
+  - name: Add cluster-hostnames in hosts file
+    blockinfile:
+      path: /etc/hosts
+      block: |
+
+        {% for server in groups['all'] %}
+            {{ hostvars[server].ansible_host }} {{server }} 
+        {% endfor %}
+
+
+
+
+
+############################################
+##    ARC installation and related - PLAY 2
+############################################
+
+- hosts: frontend
+  name: ARC installation
+  gather_facts: yes
+  become: yes
+  tags: 
+    - installarc
+    - arc
+
+  roles:
+    - arc_frontend
+
+
+

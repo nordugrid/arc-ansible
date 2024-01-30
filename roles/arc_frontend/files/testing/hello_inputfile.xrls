@@ -1,0 +1,11 @@
+&(executable=runhello.sh)
+(jobname=hello_test)
+(stdout=std.out)
+(stderr=std.err)
+(cpuTime="1 hours")
+(memory="1000")
+(inputfiles=
+("localfile" "file.txt")
+("remotefile" "http://download.nordugrid.org/repos/6/centos/el7/source/updates/repodata/repomd.xml")
+)
+(outputfiles=("output.txt" ""))

@@ -1,0 +1,44 @@
+---
+# task for file installing ARC
+
+- name: Install nordugrid gpg key
+  apt_key: 
+    url: http://download.nordugrid.org/DEB-GPG-KEY-nordugrid-6.asc
+    state: present
+
+
+- name: Get deb repo file
+  get_url:
+    url: https://download.nordugrid.org/packages/nordugrid-release/releases/6/debian/11/amd64/nordugrid-release_6~bpo11+1_all.deb
+    dest: /tmp/nordugrid-release_6~bpo11+1_all.deb
+
+
+- name: Set up repo
+  shell: "dpkg -i /tmp/nordugrid-release_6~bpo11+1_all.deb"
+
+- name: Update debian
+  apt:
+     update_cache: yes
+
+
+### Install nordugrid-arc-arex
+- name: Install nordugrid-arc-arex
+  apt: 
+    name: nordugrid-arc-arex
+    state: present
+    dpkg_options: 'force-confold'
+
+### Install nordugrid-arc-client
+- name: Install nordugrid-arc-client
+  apt: 
+    name: nordugrid-arc-client
+    state: present
+    dpkg_options: 'force-confold'
+
+...
+
+
+
+
+
+  

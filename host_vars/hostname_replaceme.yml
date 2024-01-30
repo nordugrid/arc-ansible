@@ -1,0 +1,24 @@
+
+############################
+## ARC
+############################
+nordugrid_os_dir: "rocky"
+nordugrid_os_v: "9"
+nordugrid_release_v: "6.1"
+
+arc_branch: "next"
+use_repo: "nordugrid-nightly"
+griddir: "/grid"
+
+remotedelivery: "no"
+
+lrms: fork
+controldir: "{{ griddir }}/control"
+runtimedir: "{{ griddir }}/runtime"
+sessionbasename: "session"
+cachebasename: "cache"
+
+queues: 
+  - main
+
+hepspec: 14.998

@@ -1,0 +1,92 @@
+# task for file installing ARC
+
+
+######### Get GPG keys (rhel)
+- name: Install nordugrid rpm key 
+  rpm_key: 
+    key: http://download.nordugrid.org/RPM-GPG-KEY-nordugrid-6
+    state: present
+
+
+#########  Install nordugrid repo 
+- name: Debug repo name
+  debug:
+    msg: "https://download.nordugrid.org/packages/nordugrid-release/releases/{{ nordugrid_release_v }}/{{ nordugrid_os_dir }}/{{ nordugrid_os_v }}/x86_64/nordugrid-release-{{ nordugrid_release_v }}-1.el{{ nordugrid_os_v }}.noarch.rpm"
+
+- name: Install nordugrid repo for {{ nordugrid_os_dir }} (rhel > 7)
+  yum: 
+    name: "https://download.nordugrid.org/packages/nordugrid-release/releases/{{ nordugrid_release_v }}/{{ nordugrid_os_dir }}/{{ nordugrid_os_v }}/x86_64/nordugrid-release-{{ nordugrid_release_v }}-1.el{{ nordugrid_os_v }}.noarch.rpm"
+  when: ansible_distribution_major_version|int > 7
+
+- name: Enable Powertools (rhel 8)
+  shell:  yum config-manager --set-enabled powertools 
+  when: ansible_distribution_major_version|int == 8
+
+
+- name: Enable crb repo (el9)
+  shell: dnf config-manager --set-enabled crb
+  when: ansible_distribution_major_version|int == 9
+
+
+
+- name: Create cron job for updating nightly date
+  template: 
+    dest: /etc/cron.daily/update-arc-nightly-time.sh
+    src: templates/update-arc-nightly-time.sh
+    mode: 0755
+    
+- name: Trigger the nightly date
+  command: "/bin/sh /etc/cron.daily/update-arc-nightly-time.sh"
+
+- name: Install nordugrid-nightly repo
+  copy:
+    dest: /etc/yum.repos.d/nordugrid-nightly.repo
+    content: |
+      [nordugrid-nightly]
+      name=Nordugrid ARC {{ arc_branch }} Nightly Builds - $basearch
+      baseurl=http://builds.nordugrid.org/nightlies/nordugrid-arc/{{ arc_branch }}/$arcnightly/{{ nordugrid_os_dir }}/{{ nordugrid_os_v}}/$basearch
+      enabled=1
+      gpgcheck=0
+
+#- name: temp hack 
+#  copy:
+#    dest: /etc/yum/vars/arcnightly
+#    content: 2023-02-14
+#  when: ansible_distribution_major_version|int == 9
+
+
+- name: Update yum cache
+  command: "yum makecache"
+
+
+- name: Install nordugrid-arc-arex
+  yum: 
+    name: nordugrid-arc-arex
+    enablerepo: "{{ use_repo }}"
+    state: present
+    disable_gpg_check: yes
+
+
+- name: Install nordugrid-arc-client
+  yum: 
+    name: nordugrid-arc-client
+    enablerepo: "{{ use_repo }}"
+    state: present
+    disable_gpg_check: yes
+
+
+- name: Install nordugrid-arc-plugins-arcrest
+  yum: 
+    name: nordugrid-arc-plugins-arcrest
+    enablerepo: "{{ use_repo }}"
+    state: present
+    disable_gpg_check: yes
+  when: use_repo  == "master"
+
+###################################################
+
+
+
+
+
+  

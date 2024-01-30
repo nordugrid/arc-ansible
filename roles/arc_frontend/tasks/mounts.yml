@@ -1,0 +1,76 @@
+#- name: Ensure directories exist for block storage mounts
+#  file:
+#    path: "{{ item.path }}"
+#    state: directory
+#    recurse: yes
+#    owner: root
+#    group: root
+#    mode: 0755
+#  with_items: "{{ blockstorage_frontend}}"
+
+- name: Install xfsprogs (deb)
+  package:
+    name: xfsprogs
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Create filesystems for frontend specific directories
+  filesystem:
+    fstype: "{{ item.fstype }}"
+    dev: "{{ item.device }}"
+  with_items: "{{ blockstorage_frontend}}"
+ 
+
+- name: Get device label if they exist
+  shell: lsblk -o name,mountpoint,label -n  --nodeps
+  register: devices
+
+
+- name: Output the device reg before (debug)
+  debug:
+      msg: "Found devices: {{ devices.stdout.split('\n') }}"
+
+
+- name: Init labels dict
+  set_fact: 
+    label_isset: "{{ label_isset|default({}) | combine( {item.label: false} ) }}"
+  with_items: "{{ blockstorage_frontend}}"
+
+
+- name: output initialized labels dict
+  debug:
+    var: label_isset
+
+- set_fact:
+    label_isset: "{{ label_isset|default({}) | combine( {item.label: _label|from_yaml|bool} ) }}"
+  vars:
+      _label: |
+        {% if item.label in devices.stdout %}
+        true
+        {% else %}
+        false
+        {% endif %}
+  with_items: "{{ blockstorage_frontend }}"
+
+
+- name: output new labels dict
+  debug:
+    var: label_isset
+
+- name: Label device
+  shell: "xfs_admin -L {{ item.label }} {{ item.device }}"
+  with_items: "{{ blockstorage_frontend}}"
+  when: not label_isset['{{ item.label }}'] 
+
+
+
+- name: Add mountpoints in fstab (and mount) 
+  mount:
+    fstype: "{{ item.fstype }}"
+    path: "{{ item.path }}"
+    src: "LABEL={{ item.label }}"
+    state: mounted
+  with_items: "{{ blockstorage_frontend }}"
+
+
+

@@ -1,0 +1,50 @@
+---
+
+- name: Create rte dir
+  file:
+    state: directory
+    path: "{{ runtimedir }}"
+
+- name: Enable necessary RTEs
+  shell: "arcctl rte enable ENV/PROXY"
+
+- name: Default necessary RTEs
+  shell: "arcctl rte default ENV/PROXY"
+
+- name: Create and enable necessary dummy RTEs (rhel)
+  shell: "arcctl rte enable -d {{ item }}"
+  with_items:
+    - APPS/HEP/ATLAS-SITE
+    - APPS/HEP/ATLAS-SITE-LCG
+  when: ansible_os_family == "RedHat"
+
+- name: Ensure APPS/HEP RTE dir exists (deb)
+  shell: "mkdir -p {{ runtimedir  }}/APPS/HEP"
+  when: ansible_os_family == "Debian"
+
+- name: Install custom ATLAS-SITE RTE (deb)
+  file: 
+    src: ATLAS-SITE
+    dest: "{{ runtimedir }}/APPS/HEP/ATLAS-SITE"
+  when: ansible_os_family == "Debian"
+    
+- name: Create and enable necessary dummy RTE
+  shell: "arcctl rte enable -d APPS/HEP/ATLAS-SITE-LCG"
+ 
+- name: Enable ATLAS-SITE rte (deb)
+  shell: "arcctl rte enable APPS/HEP/ATLAS-SITE"
+  when: ansible_os_family == "Debian"
+
+- name: Default ATLAS-SITE rte (deb)
+  shell: "arcctl rte default APPS/HEP/ATLAS-SITE"
+  when: ansible_os_family == "Debian"
+
+- name: Create LRMS_TMPDIR RTE
+  template: 
+    src: "lrms_tmpdir.j2"
+    dest: "{{ runtimedir }}/LRMS_TMPDIR"
+
+
+##Note: custom ATLAS-SITE RTE for debian as we need to use systems own python3 for correct libraries, e.g. libssl
+
+...

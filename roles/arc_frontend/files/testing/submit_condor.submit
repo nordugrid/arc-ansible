@@ -1,0 +1,6 @@
+Universe   = vanilla
+Executable = runhello.sh
+Log        = hello.log
+Output     = hello.out
+Error      = hello.error
+Queue
