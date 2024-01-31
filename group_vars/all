@@ -1,14 +1,13 @@
 
-domain: cern-test.uiocloud.no
-
+domain: <your-server-domain-name>
 
 default_user: 
    user: "{{ ansible_user }}"
    group: "{{ ansible_user }}"
 
 submit_user:
-   user: "{{ ansible_user }}"
-   group: "{{ ansible_user }}"
+   user: "slurm"
+   group: "slurm"
 
 
 ############################
@@ -18,7 +17,7 @@ nordugrid_os_dir: "rocky"
 nordugrid_os_v: "9"
 nordugrid_release_v: "6.1"
 
-#supported types default(non-wlcg site), atlas (wlcg-site)
+#supported types default (non-wlcg site), atlas (wlcg-site)
 site_type: "atlas"
 
 arc_branch: "next"
@@ -30,19 +29,17 @@ scratchdir: ""
 lrms: fork
 
 controldir: ""
-#controldir: "{{ griddir }}/control"
-#runtimedir: "{{ griddir }}/runtime"
+#controldir: "{/grid/control"
+
 ## ARC sessiondir is {{sessionbasename}} with digits if server is server01 for instance so example would be /grid/session01 and /grid/session02 etc
-#sessionbasename: "session"
+sessionbasename: <path-to-shared-filesystem/session>
 ## ARC cachedir is {{cachebasename}} with digits if server is server01 for instance so example would be /grid/cache01 and /grid/cache02 etc
-#cachebasename: "cache"
+sessionbasename: <path-to-shared-filesystem/cache>
 
-
-sessionbasename: "/grid/session"
-cachebasename: "/grid/cache"
 runtimedir: ""
+#runtimedir: "/grid/runtime"
 
 queues: 
-  - main
+  - fork
 
 hepspec: "" 
