@@ -154,7 +154,7 @@ Example results: session01, session02 etc.
 
 Example: 
 ```
-sessionbasename: "session"
+sessionbasename: "/mnt/grid/session"
 ```
 
 
