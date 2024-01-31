@@ -1,0 +1,43 @@
+
+domain: cern-test.uiocloud.no
+
+
+default_user: 
+   user: "{{ ansible_user }}"
+   group: "{{ ansible_user }}"
+
+submit_user:
+   user: "{{ ansible_user }}"
+   group: "{{ ansible_user }}"
+
+
+############################
+## ARC
+############################
+nordugrid_os_dir: "rocky"
+nordugrid_os_v: "9"
+nordugrid_release_v: "6.1"
+
+#supported types universal(non-wlcg site), atlas (wlcg-site)
+site_type: "atlas"
+
+arc_branch: "next"
+use_repo: "nordugrid-testing"
+griddir: "/grid"
+
+remotedelivery: "no"
+scratchdir: ""
+
+lrms: fork
+
+controldir: "{{ griddir }}/control"
+runtimedir: "{{ griddir }}/runtime"
+## ARC sessiondir is {{ griddir}}/{{sessionbasename}} with digits if server is server01 for instance so example would be /grid/session01 and /grid/session02 etc
+sessionbasename: "session"
+## ARC cachedir is {{ griddir}}/{{cachebasename}} with digits if server is server01 for instance so example would be /grid/cache01 and /grid/cache02 etc
+cachebasename: "cache"
+
+queues: 
+  - main
+
+hepspec: 14.998

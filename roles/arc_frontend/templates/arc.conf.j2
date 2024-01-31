@@ -3,9 +3,6 @@
 x509_host_cert=/etc/grid-security/testCA-hostcert.pem
 x509_host_key=/etc/grid-security/testCA-hostkey.pem
 
-
-[authtokens]
-
 [authgroup:testers]
 file=/etc/grid-security/testCA.allowed-subjects                                          
 subject=/DC=org/DC=terena/DC=tcs/C=NO/O=Universitetet i Oslo/CN=Maiken Pedersen maikenp@uio.no
@@ -13,7 +10,7 @@ subject=/DC=org/DC=terena/DC=tcs/C=NO/O=Universitetet i Oslo/CN=Maiken Pedersen 
 
 #To-do: need to insert default submit user here - take from EGI ansible scripts
 [mapping]
-map_to_user=testers grid:grid
+map_to_user=testers {{ submit_user.user }}:{{ submit_user.group }}
 
 
 #To-do: Is benchmark relevant? 
@@ -23,22 +20,26 @@ benchmark=HEPSPEC:{{hepspec}}
 
 [arex]
 controldir={{ controldir }}
-{% for server in groups['datadelivery'] %}
+{% if groups['datadelivery'] is defined %}
+{% for server in groups['datadelivery' ] %}
 sessiondir={{ griddir }}/{{ sessionbasename }}{{ server | regex_search('(\\d+)(?!.*\\d)') }}
 {% endfor %}
+{% endif %}
 runtimedir={{ runtimedir }}
+{% if scratchdir|length %}
 scratchdir={{ scratchdir }}
-
+{% endif %}
 
 [arex/cache]
+{% if groups['datadelivery'] is defined %}
 {% for server in groups['datadelivery'] %}
 cachedir={{ griddir }}/{{ cachebasename }}{{ server | regex_search('(\\d+)(?!.*\\d)') }}
 {% endfor %}
+{% endif %}
 
 [arex/data-staging]
 
 
-#To-do: Not sure if remote datadelivery service is necessary/relevant for cloud deployment
 {% if remotedelivery == "yes" %}
 {% for server in groups['datadelivery'] %}
 deliveryservice=http://{{ hostvars[server].ansible_host }}:33555/datadeliveryservice

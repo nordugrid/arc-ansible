@@ -1,0 +1,5 @@
+##To make sure atlas pikot jobs do not go to default /tmp but to the directory where the job is run
+
+{% if scratchdir|length %}
+export TMPDIR={{ scratchdir }}
+{% endif %}

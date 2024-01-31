@@ -31,9 +31,9 @@
     when: (ansible_os_family == "RedHat") and ansible_distribution_major_version|int == 8
 
 
-  - name: Install emacs, wget, development tools  rhel
+  - name: Install emacs, wget, development tools, epel-release  rhel
     package:
-      name: ['emacs', 'wget', '@Development tools']
+      name: ['emacs', 'wget', '@Development tools',epel-release]
       disablerepo: "nordugrid*"
       state: present
     when: (ansible_os_family == "RedHat") 

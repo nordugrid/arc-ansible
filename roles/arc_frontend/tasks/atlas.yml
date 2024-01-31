@@ -39,10 +39,12 @@
   shell: "arcctl rte default APPS/HEP/ATLAS-SITE"
   when: ansible_os_family == "Debian"
 
+
 - name: Create LRMS_TMPDIR RTE
   template: 
     src: "lrms_tmpdir.j2"
     dest: "{{ runtimedir }}/LRMS_TMPDIR"
+  when: scratchdir|length > 0
 
 
 ##Note: custom ATLAS-SITE RTE for debian as we need to use systems own python3 for correct libraries, e.g. libssl

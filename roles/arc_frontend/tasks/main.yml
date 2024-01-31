@@ -2,24 +2,28 @@
 ---
 # tasks file for ansible-role-arc-frontend
 
+##################################################
+## ENSURE shared storage ARC dirs are present
+##################################################
 
-## Load the correct defaults file
-##########
+- name: Create sessiondirs for nfs mounted sessiondirs
+  file: 
+    path: "{{ griddir }}/{{sessionbasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
+    state: directory
+    recurse: yes
+  with_items: "{{ groups['datadelivery'] }}"
+  when: sessionbasename|length >0 
 
-- name: Prepare mounts for frontend
-  include: mounts.yml
+
+- name: Create cachedirs for nfs mounted cachedirs
+  file: 
+    path: "{{ griddir }}/{{cachebasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
+    state: directory
+    recurse: yes
+  with_items: "{{ groups['datadelivery'] }}"
+  when: cachebasename|length >0
 
 
-- name: Avoid filling up /var/log/secure with messages about ARC writing to /var/log/arc
-  copy:
-    src: files/etc/rsyslog.d/00-arc.conf
-    dest: /etc/rsyslog.d/00-arc.conf
-    
-
-- name: Restart rsyslog
-  systemd:
-    name: rsyslog
-    state: restarted
 
 
 ##################################################
@@ -67,9 +71,8 @@
   ignore_errors: yes
 
 
-
-#- name: Install CA's
-#  shell: "arcctl deploy igtf-ca classic mics"
+- name: Install CA's
+  shell: "arcctl deploy igtf-ca classic"
 
 - name: Run test-cert init
   shell: "arcctl test-ca init -f -v 3600"
@@ -91,22 +94,8 @@
     - runtime
     - atlas
     - atlas_frontend
+  when: site_type == "atlas"
 
-
-## Patch slurm submit script
-#############################
-
-- name: Install patch command
-  yum:
-    name: patch
-    state: present
-
-- name: Patch slurm submit script to include gres option
-  patch:
-    src: files/submit-SLURM-job.patch
-    dest: /usr/share/arc/submit-SLURM-job
-    backup: yes
-  when: grestypes_slurmconf is defined 
 
 ## Attempt to start ARC
 ##########################
@@ -116,13 +105,6 @@
   ignore_errors: yes
   
 
-#########################
-## Host certificate
-#########################
-- name: Prepare for host certificate
-  include: hostcert.yml
-  tags: certificate
-  when: (inventory_hostname in groups['frontend'])
 
 
 #########################

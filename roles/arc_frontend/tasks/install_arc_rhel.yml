@@ -9,14 +9,10 @@
 
 
 #########  Install nordugrid repo 
-- name: Debug repo name
-  debug:
-    msg: "https://download.nordugrid.org/packages/nordugrid-release/releases/{{ nordugrid_release_v }}/{{ nordugrid_os_dir }}/{{ nordugrid_os_v }}/x86_64/nordugrid-release-{{ nordugrid_release_v }}-1.el{{ nordugrid_os_v }}.noarch.rpm"
-
 - name: Install nordugrid repo for {{ nordugrid_os_dir }} (rhel > 7)
   yum: 
     name: "https://download.nordugrid.org/packages/nordugrid-release/releases/{{ nordugrid_release_v }}/{{ nordugrid_os_dir }}/{{ nordugrid_os_v }}/x86_64/nordugrid-release-{{ nordugrid_release_v }}-1.el{{ nordugrid_os_v }}.noarch.rpm"
-  when: ansible_distribution_major_version|int > 7
+  when: ansible_distribution_major_version|int > 7 and (use_repo == "nordugrid-nightlies" or use_repo == "nordugrid-master")
 
 - name: Enable Powertools (rhel 8)
   shell:  yum config-manager --set-enabled powertools 
@@ -27,16 +23,18 @@
   shell: dnf config-manager --set-enabled crb
   when: ansible_distribution_major_version|int == 9
 
-
-
+######## Option1: ARC nightly installation ################
 - name: Create cron job for updating nightly date
   template: 
     dest: /etc/cron.daily/update-arc-nightly-time.sh
     src: templates/update-arc-nightly-time.sh
     mode: 0755
+  when: use_repo == "nordugrid-nightly"
     
 - name: Trigger the nightly date
   command: "/bin/sh /etc/cron.daily/update-arc-nightly-time.sh"
+  when: use_repo == "nordugrid-nightly"
+
 
 - name: Install nordugrid-nightly repo
   copy:
@@ -47,12 +45,36 @@
       baseurl=http://builds.nordugrid.org/nightlies/nordugrid-arc/{{ arc_branch }}/$arcnightly/{{ nordugrid_os_dir }}/{{ nordugrid_os_v}}/$basearch
       enabled=1
       gpgcheck=0
+  when: use_repo == "nordugrid-nightly"
+########## End option 1
 
-#- name: temp hack 
-#  copy:
-#    dest: /etc/yum/vars/arcnightly
-#    content: 2023-02-14
-#  when: ansible_distribution_major_version|int == 9
+######## Option2: ARC testing installation ################
+- name: Install nordugrid-testing repo
+  copy:
+    dest: /etc/yum.repos.d/nordugrid-testing.repo
+    content: |
+     [nordugrid-testing]
+     name=NorduGrid - $basearch - Testing
+     baseurl=http://download.nordugrid.org/repos/7/{{ nordugrid_os_dir }}/{{ nordugrid_os_v }}/$basearch/testing
+     enabled=1
+     gpgcheck=1
+     gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-nordugrid-6
+
+     [nordugrid-testing-debuginfo]
+     name=NorduGrid - $basearch - Testing - Debug
+     baseurl=http://download.nordugrid.org/repos/7/{{ nordugrid_os_dir }}/{{ nordugrid_os_v }}/$basearch/testing/debug
+     enabled=0
+     gpgcheck=1
+     gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-nordugrid-6
+
+     [nordugrid-testing-source]
+     name=NorduGrid - Testing - Source
+     baseurl=http://download.nordugrid.org/repos/7/{{ nordugrid_os_dir }}/{{ nordugrid_os_v }}/source/testing
+     enabled=0
+     gpgcheck=1
+     gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-nordugrid-6
+  when: use_repo == "nordugrid-testing"
+########## End option 2
 
 
 - name: Update yum cache
@@ -81,7 +103,7 @@
     enablerepo: "{{ use_repo }}"
     state: present
     disable_gpg_check: yes
-  when: use_repo  == "master"
+  when: use_repo  == "nordugrid-master"
 
 ###################################################
 
