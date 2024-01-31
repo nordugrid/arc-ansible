@@ -83,6 +83,8 @@ Typically 6.1 is the correct value for ARC 7.
 ### site_type
 
 This is a flag to trigger installation of ARC runtime environments needed for specific experiments. 
+Accepted values are currently `atlas` or `default`. 
+
 If you do not know what this means, select the ```default``` type
 
 ### arc_branch
