@@ -5,7 +5,6 @@ x509_host_key=/etc/grid-security/testCA-hostkey.pem
 
 [authgroup:testers]
 file=/etc/grid-security/testCA.allowed-subjects                                          
-subject=/DC=org/DC=terena/DC=tcs/C=NO/O=Universitetet i Oslo/CN=Maiken Pedersen maikenp@uio.no
 
 
 #To-do: need to insert default submit user here - take from EGI ansible scripts
@@ -16,24 +15,37 @@ map_to_user=testers {{ submit_user.user }}:{{ submit_user.group }}
 #To-do: Is benchmark relevant? 
 [lrms]
 lrms={{ lrms }}
+{% if hepspec is defined and hepspec|length %}
 benchmark=HEPSPEC:{{hepspec}}
+{% endif %}
 
 [arex]
+{% if controldir is defined and controldir|length %}
 controldir={{ controldir }}
+{% endif %}
+
 {% if groups['datadelivery'] is defined %}
 {% for server in groups['datadelivery' ] %}
-sessiondir={{ griddir }}/{{ sessionbasename }}{{ server | regex_search('(\\d+)(?!.*\\d)') }}
+{% if sessionbasename is defined and sessionbasename|length %}
+sessiondir={{ sessionbasename }}{{ server | regex_search('(\\d+)(?!.*\\d)') }}
+{% endif %}
 {% endfor %}
 {% endif %}
+
+{% if runtimedir is defined and runtimedir|length %}
 runtimedir={{ runtimedir }}
-{% if scratchdir|length %}
+{% endif %}
+
+{% if scratchdir is defined and scratchdir|length %}
 scratchdir={{ scratchdir }}
 {% endif %}
 
 [arex/cache]
 {% if groups['datadelivery'] is defined %}
 {% for server in groups['datadelivery'] %}
-cachedir={{ griddir }}/{{ cachebasename }}{{ server | regex_search('(\\d+)(?!.*\\d)') }}
+{% if cachebasename is defined and cachebasename|length %}
+cachedir={{ cachebasename }}{{ server | regex_search('(\\d+)(?!.*\\d)') }}
+{% endif %}
 {% endfor %}
 {% endif %}
 
@@ -54,12 +66,6 @@ allownew=yes
 
 
 [arex/jura]
-
-
-#To-think of - possibility for accounting - needs EGI infrastructure form entry and if-test here
-#[arex/jura/sgas:ndgf_sgas]
-#targeturl=https://accounting.ndgf.org:6143/sgas
-#localid_prefix=UiO_ARCTEST_{{ hostvars[groups['frontend'][0]].ansible_host }}
 
 
 [infosys]

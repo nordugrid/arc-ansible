@@ -8,20 +8,20 @@
 
 - name: Create sessiondirs for nfs mounted sessiondirs
   file: 
-    path: "{{ griddir }}/{{sessionbasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
+    path: "{{sessionbasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
     state: directory
     recurse: yes
   with_items: "{{ groups['datadelivery'] }}"
-  when: sessionbasename|length >0 
+  when: sessionbasename is defined and  sessionbasename|length >0 
 
 
 - name: Create cachedirs for nfs mounted cachedirs
   file: 
-    path: "{{ griddir }}/{{cachebasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
+    path: "{{cachebasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
     state: directory
     recurse: yes
   with_items: "{{ groups['datadelivery'] }}"
-  when: cachebasename|length >0
+  when: cachebasename is defined and cachebasename|length >0
 
 
 
@@ -53,6 +53,9 @@
   tags: 
     - installarc
     - arcconf
+  notify:
+    - Restart ARC
+
 
 - name: Install igtf package (deb)
   apt:
@@ -94,7 +97,7 @@
     - runtime
     - atlas
     - atlas_frontend
-  when: site_type == "atlas"
+  when: site_type == "atlas" and (runtimedir is defined and runtimedir|length > 0)
 
 
 ## Attempt to start ARC
@@ -104,7 +107,6 @@
   shell: "arcctl service start -a"
   ignore_errors: yes
   
-
 
 
 #########################

@@ -1,0 +1,3 @@
+- name: Restart ARC
+  shell:
+    arcctl service restart -a

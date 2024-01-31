@@ -4,6 +4,7 @@
   file:
     state: directory
     path: "{{ runtimedir }}"
+  when: runtimedir is defined and runtimedir|length > 0
 
 - name: Enable necessary RTEs
   shell: "arcctl rte enable ENV/PROXY"
