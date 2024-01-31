@@ -29,7 +29,7 @@ scratchdir: ""
 lrms: fork
 
 controldir: ""
-#controldir: "{/grid/control"
+#controldir: "/grid/control"
 
 ## ARC sessiondir is {{sessionbasename}} with digits if server is server01 for instance so example would be /grid/session01 and /grid/session02 etc
 sessionbasename: <path-to-shared-filesystem/session>

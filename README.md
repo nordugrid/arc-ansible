@@ -149,12 +149,13 @@ http://www.nordugrid.org/arc/arc7/admins/reference.html#runtimedir
 This variable is used to build a set of session directory folder names. 
 
 The sessiondir is ususally an existing shared filesystem that all compute nodes have access to. 
+Use your actual existing shared filesystem for this. 
 
-Example results: session01, session02 etc. 
+Example results: sessiondir01, sessiondir02 etc. 
 
 Example: 
 ```
-sessionbasename: "/mnt/grid/session"
+sessionbasename: "/mnt/grid/sessiondir"
 ```
 
 
