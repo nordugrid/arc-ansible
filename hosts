@@ -1,5 +1,5 @@
 [frontend]
-egi-deploytest ansible_host=158.37.63.240
+<your-server-name> ansible_host=<your-server-ip>
 
 [datadelivery:children]
 frontend
