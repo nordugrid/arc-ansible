@@ -4,10 +4,12 @@ domain: <your-server-domain-name>
 default_user: 
    user: "{{ ansible_user }}"
    group: "{{ ansible_user }}"
+   home: "{{ ansible_user_home }}"
 
 submit_user:
    user: "slurm"
    group: "slurm"
+   home: "/home/slurm"
 
 
 ############################
@@ -33,10 +35,10 @@ controldir: ""
 
 ## ARC sessiondir is {{sessionbasename}} with digits if server is server01 for instance so example would be /grid/session01 and /grid/session02 etc
 #sessionbasename: <path-to-shared-filesystem/session>
-sessionbasename: "/home/{{ submit_user.user }}/sessiondir"
+sessionbasename: "{{ submit_user.home }}/sessiondir"
 ## ARC cachedir is {{cachebasename}} with digits if server is server01 for instance so example would be /grid/cache01 and /grid/cache02 etc
 #cachebasename: <path-to-shared-filesystem/cache>
-cachebasename: "/home/{{ submit_user.user }}/cachedir"
+cachebasename: "{{ submit_user.home }}/cachedir"
 runtimedir: ""
 #runtimedir: "/grid/runtime"
 

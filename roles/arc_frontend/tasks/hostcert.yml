@@ -1,6 +1,6 @@
 - name: Create certificates directory
   file:
-    path: "/home/{{default_user.user}}/certificates"
+    path: "{{ default_user.home }}/certificates"
     state: directory
     owner: "{{ default_user.user }}"
     group: "{{ default_user.group }}"
@@ -9,12 +9,12 @@
 - name: Create certificate config file
   template: 
     src: templates/x509.cnf
-    dest: "/home/{{default_user.user}}/certificates/{{inventory_hostname}}.cnf"
+    dest: "{{ default_user.home }}/certificates/{{inventory_hostname}}.cnf"
 
 
 - name: Create recipe file for creating certificate requeset
   copy:
-    dest: "/home/{{default_user.user}}/certificates/certificate_recipe"
+    dest: "{{ default_user.home }}/certificates/certificate_recipe"
     content: |
      openssl req -new -config {{inventory_hostname}}.cnf -keyout {{inventory_hostname}}.key -out {{inventory_hostname}}.csr
      
