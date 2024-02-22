@@ -116,14 +116,15 @@
     when: ansible_os_family == "Debian"
 
 
-  - name: Add cluster-hostnames in hosts file
-    blockinfile:
-      path: /etc/hosts
-      block: |
-
-        {% for server in groups['all'] %}
-            {{ hostvars[server].ansible_host }} {{server }} 
-        {% endfor %}
+## Taken care of by Infrastructure Manager
+#  - name: Add cluster-hostnames in hosts file
+#    blockinfile:
+#      path: /etc/hosts
+#      block: |
+#
+#        {% for server in groups['all'] %}
+#            {{ hostvars[server].ansible_host }} {{server }}
+#        {% endfor %}
 
 
 
