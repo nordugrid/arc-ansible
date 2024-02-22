@@ -37,13 +37,13 @@
 ##################################################
 
 - name: Include installation play for standard installation from nordugrid repo (rhel)
-  include: install_arc_rhel.yml
+  include_tasks: install_arc_rhel.yml
   tags: 
     - installarc
   when: ansible_os_family == "RedHat"
 
 - name: Include installation play for standard installation from nordugrid repo (deb)
-  include: install_arc_deb.yml
+  include_tasks: install_arc_deb.yml
   tags: 
     - installarc
   when: ansible_os_family == "Debian"
@@ -97,7 +97,7 @@
 ###############
 
 - name: ATLAS specific RTEs
-  include: atlas.yml
+  include_tasks: atlas.yml
   tags:
     - installarc
     - runtime
@@ -119,7 +119,7 @@
 ## ARC test files
 #########################
 - name: Place testing scripts on frontend
-  include: arctesting.yml
+  include_tasks: arctesting.yml
   tags: arctesting
   when: (inventory_hostname in groups['frontend'])
 
