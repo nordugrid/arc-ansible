@@ -81,7 +81,7 @@
 
 
 - name: Install CA's
-  shell: "arcctl deploy igtf-ca classic"
+  shell: "arcctl deploy igtf-ca classic --installrepo igtf"
 
 - name: Run test-cert init
   shell: "arcctl test-ca init -f -v 3600"
