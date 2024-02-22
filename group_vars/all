@@ -18,7 +18,7 @@ nordugrid_os_v: "9"
 nordugrid_release_v: "6.1"
 
 #supported types default (non-wlcg site), atlas (wlcg-site)
-site_type: "atlas"
+site_type: "default"
 
 arc_branch: "next"
 use_repo: "nordugrid-testing"
