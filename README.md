@@ -20,8 +20,6 @@ domain: "cern-test.uiocloud.no"
 ```
 
 
-Note: Should be extracted automatically from the server creation scripts. 
-
 
 ### default_user
 This is the default user on the ARC server
@@ -40,8 +38,6 @@ default_user:
 If the group-name is different than the user-name - it must be specified
 
 
-Note: Should be extracted automatically from the server creation scripts. 
-
 ### submit_user
 What user submits the batch system job. 
 
@@ -57,8 +53,6 @@ default_user:
 
 If the group-name is different than the user-name - it must be specified
 
-Note: Should be extracted automatically from the server creation scripts. 
-
 ### nordugrid_os_dir
 
 The os type of the ARC server. Used to point to the correct Nordugrid repo. 
@@ -67,7 +61,6 @@ Accepted values are: "centos/centos-stream/rocky/fedora/debian/ubuntu"
 
 If `almalinux` - use `rocky` 
 
-Note: Should in some way be extracted automatically from the server creation scripts. But needs some sanitasion to match the Nordugrid repo names. 
 
 ### nordugrid_os_v
 The os version of the ARC server. Used to point to the correct Nordugrid repo. 
