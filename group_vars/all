@@ -33,10 +33,10 @@ controldir: ""
 
 ## ARC sessiondir is {{sessionbasename}} with digits if server is server01 for instance so example would be /grid/session01 and /grid/session02 etc
 #sessionbasename: <path-to-shared-filesystem/session>
-sessionbasename: /home/slurm/sessiondir
+sessionbasename: "/home/slurm/sessiondir"
 ## ARC cachedir is {{cachebasename}} with digits if server is server01 for instance so example would be /grid/cache01 and /grid/cache02 etc
 #cachebasename: <path-to-shared-filesystem/cache>
-cachebasename: "home/slurm/cachedir"
+cachebasename: "/home/slurm/cachedir"
 runtimedir: ""
 #runtimedir: "/grid/runtime"
 
