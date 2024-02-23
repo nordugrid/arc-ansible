@@ -112,12 +112,19 @@ Before ARC 7 is released, use either nordugrid-testing or nordugrid-nightly. nor
 ## Variables used to build the ARC configuration file `/etc/arc.conf`
 
 ### remotedelivery
-Should ARC have a stand-alone remote data delivery server. 
+Should ARC have a stand-alone remote data delivery server. If it does then make sure that your inventory ansible file has a `datadelivery` group. 
 
-http://www.nordugrid.org/arc/arc7/admins/reference.html#deliveryservice
+Information about the configuration in arc.conf on the ARC-CE: http://www.nordugrid.org/arc/arc7/admins/reference.html#deliveryservice
+
+Information about how to set up and configure a standalone remote data delivery server: http://www.nordugrid.org/arc/arc7/tech/data/dds.html
 
 Accepted values "yes", "no"
 
+
+### remotedelivery_port
+What port the remote datadelivery server listens for datastaging requests. 
+
+Accepted values: Any port-number you are using, e.g. 443. 
 
 ### scratchdir
 If the compute nodes have a scratch directory, add the path here. If not leave string empty. 
