@@ -6,8 +6,8 @@ default_user:
    group: "{{ ansible_user }}"
 
 submit_user:
-   user: "slurm"
-   group: "slurm"
+   user: "arcuser"
+   group: "arcuser"
 
 
 ############################
