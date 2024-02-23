@@ -74,9 +74,9 @@
       - ansible_distribution_major_version|int == 11
 
 
-  - name: Install emacs, wget, ntp (deb)
+  - name: Install emacs, wget, ntp, gpg (deb)
     package:
-      name: ['emacs', 'wget', 'ntp','unattended-upgrades']
+      name: ['emacs', 'wget', 'ntp','unattended-upgrades', 'gpg']
       state: present
     when:
       - ansible_distribution == "Debian"
