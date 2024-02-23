@@ -1,3 +1,4 @@
+
 # arc-ansible
 Ansible playbook for ARC installation
 
@@ -22,24 +23,23 @@ domain: "cern-test.uiocloud.no"
 
 
 ### default_user
-This is the default user on the ARC server
-
+This is the default user on the ARC server (assuming a cloud server). You can most probably leave it as is assuming you have configured your ansible inventory with the correct ansible_user name. I
 
 Example: 
 
-
-```
-default_user: 
-   user: "almalinux"
-   group: "almalinux"
-
+``` 
+default_user:
+   user: "{{ ansible_user }}"
+   group: "{{ ansible_user }}"
 ```
 
-If the group-name is different than the user-name - it must be specified
+
+
+If the group-name is different than the user-name - - make sure to put the correct one in the `group` variable. 
 
 
 ### submit_user
-What user submits the batch system job. 
+What user submits the batch system job. If the user does not exist, the playbook will create the user. 
 
 Example: 
 
@@ -49,9 +49,7 @@ submit_user:
    group: "arcuser"
 ```
 
-
-
-If the group-name is different than the user-name - it must be specified
+If the group-name is different than the user-name - make sure to put the correct one in the `group` variable. 
 
 ### nordugrid_os_dir
 
@@ -68,7 +66,7 @@ The os version of the ARC server. Used to point to the correct Nordugrid repo.
 Accepted values are found here: http://www.nordugrid.org/arc/arc7/common/repos/repository.html
 
 ### nordugrid_release_v
-This is the release version of the Nordugrid release package. 
+This is the release version of the Nordugrid release package (not the ARC version itself). 
 
 Typically 6.1 is the correct value for ARC 7. 
 
@@ -173,7 +171,8 @@ queues:
 ```
 
 ### hepspec
-If you have benchmarked your servers, add the value here. The values must be in HEPSPEC06 value. If you do not have this, leave the parameter empty. 
+If you have benchmarked your servers, add the value here. The values must be in HEPSPEC06 value or HEPSCORE value. 
+If you do not have this, leave the parameter empty. 
 
 Example: 
 
@@ -192,3 +191,6 @@ Once you have run the playbook you can submit a test-job using the ARC client in
    ``` /bin/bash submit-cmd.sh```
 
 If you instead want to submit a test-job as the user used to map jobs already configured in arc.conf (submit_user in group_vars/all) - you need to su into that user. You can then skip step 1 as this is already taken care of in the ansible playbook. 
+
+More on how to test your site: http://www.nordugrid.org/arc/arc7/users/submit_job.html
+
