@@ -44,9 +44,9 @@ What user submits the batch system job.
 Example: 
 
 ```
-default_user: 
-   user: "slurm"
-   group: "slurm"
+submit_user: 
+   user: "arcuser"
+   group: "arcuser"
 ```
 
 
@@ -179,3 +179,16 @@ Example:
 
 ```hepspec: 14.998```
 
+# Testing the installation
+Once you have run the playbook you can submit a test-job using the ARC client installed on the same machine as the ARC server (done by this ansible playbook). 
+
+1. Create an x509 user certificate for the user you want to submit as - if it is different than the ARC subitter configured in arc.conf (submit_user variable in the group_vars/all file). Example: cloudadm - here I am setting validity for 360 days, installing the usercert in the /home/cluodadm/.globus folder and forcing it
+   ``` sudo arcctl test-ca usercert -v 360 -i cloudadm  -f ```
+2. Create a proxy certificate using the already installed Test-CA - as same user as above (here cloudadm) do:
+   ```arcproxy```
+3. Go into the `testing` folder where some prepared test-files can be found
+   ``` cd ~/testing```
+4. Execute the command in submit-cmd.sh
+   ``` /bin/bash submit-cmd.sh```
+
+If you instead want to submit a test-job as the user used to map jobs already configured in arc.conf (submit_user in group_vars/all) - you need to su into that user. You can then skip step 1 as this is already taken care of in the ansible playbook. 
