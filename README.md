@@ -39,7 +39,7 @@ If the group-name is different than the user-name - - make sure to put the corre
 
 
 ### submit_user
-What user submits the batch system job. If the user does not exist, the playbook will create the user. 
+What user submits the batch system job. If the user does not exist, the playbook will create the user. This user should be a normal user. It could for instance just be the default_user set above. The batch call will be issued by this user, and the job in the batch system will run as this user. 
 
 Example: 
 
