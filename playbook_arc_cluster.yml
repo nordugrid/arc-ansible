@@ -69,15 +69,18 @@
 
   - name: Update system if deb
     shell: apt-get update -y
-    when: ansible_os_family == "Debian"
+    when:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_major_version|int == 11
 
 
   - name: Install emacs, wget, ntp (deb)
     package:
       name: ['emacs', 'wget', 'ntp','unattended-upgrades']
-      disablerepo: "nordugrid*"
       state: present
-    when: ansible_os_family == "Debian"
+    when:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_major_version|int == 11
 
 
   - name: Start and enable unattended-upgrades (debian)
@@ -85,8 +88,10 @@
       name: unattended-upgrades
       enabled: yes
       state: started
-    when: ansible_os_family == "Debian"
-  
+    when:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_major_version|int == 11
+ 
 
   - name: Start ntp and yum-cron (el == 7)
     systemd:
@@ -103,7 +108,9 @@
       name: ntp
       enabled: yes
       state: started
-    when: ansible_os_family == "Debian"
+    when:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_major_version|int == 11
 
 
 ## Taken care of by Infrastructure Manager

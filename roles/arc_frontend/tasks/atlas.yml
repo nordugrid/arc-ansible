@@ -21,25 +21,32 @@
 
 - name: Ensure APPS/HEP RTE dir exists (deb)
   shell: "mkdir -p {{ runtimedir  }}/APPS/HEP"
-  when: ansible_os_family == "Debian"
+  when:
+   - ansible_distribution == "Debian"
+   - ansible_distribution_major_version|int == 11
 
 - name: Install custom ATLAS-SITE RTE (deb)
   file: 
     src: ATLAS-SITE
     dest: "{{ runtimedir }}/APPS/HEP/ATLAS-SITE"
-  when: ansible_os_family == "Debian"
-    
+  when:
+   - ansible_distribution == "Debian"
+   - ansible_distribution_major_version|int == 11
+
 - name: Create and enable necessary dummy RTE
   shell: "arcctl rte enable -d APPS/HEP/ATLAS-SITE-LCG"
  
 - name: Enable ATLAS-SITE rte (deb)
   shell: "arcctl rte enable APPS/HEP/ATLAS-SITE"
-  when: ansible_os_family == "Debian"
+  when:
+   - ansible_distribution == "Debian"
+   - ansible_distribution_major_version|int == 11
 
 - name: Default ATLAS-SITE rte (deb)
   shell: "arcctl rte default APPS/HEP/ATLAS-SITE"
-  when: ansible_os_family == "Debian"
-
+  when:
+   - ansible_distribution == "Debian"
+   - ansible_distribution_major_version|int == 11
 
 - name: Create LRMS_TMPDIR RTE
   template: 
