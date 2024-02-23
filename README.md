@@ -180,8 +180,11 @@ queues:
 ```
 
 ### hepspec
-If you have benchmarked your servers, add the value here. The values must be in HEPSPEC06 value or HEPSCORE value. 
+If you have benchmarked your servers, add the value here. The values must be in HEPSPEC value or Hepscore23 value. 
 If you do not have this, leave the parameter empty. 
+
+The hepspec is used in the arc.conf as the `benchmark` value in the `queue` block: http://www.nordugrid.org/arc/arc7/admins/reference.html#reference-queue-benchmark - it is only relevant if you are relying on accounting from ARC. 
+
 
 Example: 
 
