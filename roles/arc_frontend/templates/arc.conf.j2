@@ -54,7 +54,7 @@ cachedir={{ cachebasename }}{{ server | regex_search('(\\d+)(?!.*\\d)') }}
 
 {% if remotedelivery == "yes" %}
 {% for server in groups['datadelivery'] %}
-deliveryservice=http://{{ hostvars[server].ansible_host }}:33555/datadeliveryservice
+deliveryservice=http://{{ hostvars[server].ansible_host }}:{{remotedelivery_port}}/datadeliveryservice
 {% endfor %}
 {% endif %}
 

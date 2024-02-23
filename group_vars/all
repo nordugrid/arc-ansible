@@ -7,9 +7,9 @@ default_user:
    home: "{{ ansible_user_home }}"
 
 submit_user:
-   user: "slurm"
-   group: "slurm"
-   home: "/home/slurm"
+   user: "arcuser"
+   group: "arcuser"
+   home: "/home/arcuser"
 
 
 ############################
