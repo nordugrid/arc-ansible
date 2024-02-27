@@ -23,7 +23,7 @@
 
   - name: Install emacs, wget, development tools, epel-release  rhel
     package:
-      name: ['emacs', 'wget', '@Development tools',epel-release]
+      name: ['emacs', 'wget', '@Development tools', 'epel-release', 'time']
       disablerepo: "nordugrid*"
       state: present
     when: (ansible_os_family == "RedHat") 
@@ -76,7 +76,7 @@
 
   - name: Install emacs, wget, ntp, gpg (deb)
     package:
-      name: ['emacs', 'wget', 'ntp','unattended-upgrades', 'gpg']
+      name: ['emacs', 'wget', 'ntp','unattended-upgrades', 'gpg', 'time']
       state: present
     when:
       - ansible_distribution == "Debian"
