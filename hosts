@@ -1,5 +1,5 @@
 [frontend]
-78.128.251.84
+<your-server-name> ansible_host=<your-server-ip>
 
 [datadelivery:children]
 frontend
