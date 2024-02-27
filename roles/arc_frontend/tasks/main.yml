@@ -130,4 +130,11 @@
   when: (inventory_hostname in groups['frontend'])
 
 
+## Clean up BEARER_TOKEN
+##########################
+- name: Clean up BEARER_TOKEN from IM
+  lineinfile:
+    path: /etc/environment
+    state: absent
+    regexp: '^BEARER_TOKEN'
 ...
