@@ -1,9 +1,9 @@
 [frontend]
-<your-server-name> ansible_host=<your-server-ip>
+78.128.251.84
 
 [datadelivery:children]
 frontend
 
 [all:vars]
-ansible_user=almalinux
+ansible_user=cloudadm
 ansible_python_interpreter=/usr/bin/python3

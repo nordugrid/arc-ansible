@@ -30,26 +30,8 @@ Example:
 domain: "cern-test.uiocloud.no"
 ```
 
-
-
-### default_user
-This is the default user on the ARC server (assuming a cloud server). You can most probably leave it as is assuming you have configured your ansible inventory with the correct ansible_user name. I
-
-Example: 
-
-``` 
-default_user:
-   user: "{{ ansible_user }}"
-   group: "{{ ansible_user }}"
-```
-
-
-
-If the group-name is different than the user-name - - make sure to put the correct one in the `group` variable. 
-
-
 ### submit_user
-What user submits the batch system job. If the user does not exist, the playbook will create the user. This user should be a normal user. It could for instance just be the default_user set above. The batch call will be issued by this user, and the job in the batch system will run as this user. 
+What user submits the batch system job. The batch call will be issued by this user, and the job in the batch system will run as this user. 
 
 Example: 
 
@@ -201,16 +183,12 @@ Example:
 # Testing the installation
 Once you have run the playbook you can submit a test-job using the ARC client installed on the same machine as the ARC server (done by this ansible playbook). 
 
-1. Create an x509 user certificate for the user you want to submit as - if it is different than the ARC subitter configured in arc.conf (submit_user variable in the group_vars/all file). Example: cloudadm - here I am setting validity for 360 days, installing the usercert in the /home/cluodadm/.globus folder and forcing it
-   ``` sudo arcctl test-ca usercert -v 360 -i cloudadm  -f ```
-2. Create a proxy certificate using the already installed Test-CA - as same user as above (here cloudadm) do:
+1. Create a proxy certificate:
    ```arcproxy```
-3. Go into the `testing` folder where some prepared test-files can be found
+2. Go into the `testing` folder where some prepared test-files can be found
    ``` cd ~/testing```
-4. Execute the command in submit-cmd.sh
+3. Execute the command in submit-cmd.sh
    ``` /bin/bash submit-cmd.sh```
-
-If you instead want to submit a test-job as the user used to map jobs already configured in arc.conf (submit_user in group_vars/all) - you need to su into that user. You can then skip step 1 as this is already taken care of in the ansible playbook. 
 
 More on how to test your site: http://www.nordugrid.org/arc/arc7/users/submit_job.html
 
