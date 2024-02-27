@@ -1,6 +1,8 @@
 
 domain: localdomain
 
+
+#any user that exists on whole cluster, can be the default ansible_user
 submit_user:
    user: "slurm"
    group: "slurm"
@@ -12,6 +14,11 @@ submit_user:
 ############################
 nordugrid_os_dir: "rocky"
 nordugrid_os_v: "9"
+#vname only for ubuntu and debian e.g. bullseye
+nordugrid_os_vname: ""
+
+##For Debian and Ubuntu: 6.2
+##For RHEL: 6.1
 nordugrid_release_v: "6.1"
 
 #supported types default (non-wlcg site), atlas (wlcg-site)
@@ -23,21 +30,24 @@ use_repo: "nordugrid-testing"
 remotedelivery: "no"
 scratchdir: ""
 
-lrms: slurm
+lrms: "fork"
 
 controldir: ""
-#controldir: "/grid/control"
+#controldir: "/arc/control"
 
 ## ARC sessiondir is {{sessionbasename}} with digits if server is server01 for instance so example would be /grid/session01 and /grid/session02 etc
 #sessionbasename: <path-to-shared-filesystem/session>
 sessionbasename: "{{ submit_user.home }}/sessiondir"
+
 ## ARC cachedir is {{cachebasename}} with digits if server is server01 for instance so example would be /grid/cache01 and /grid/cache02 etc
 #cachebasename: <path-to-shared-filesystem/cache>
 cachebasename: "{{ submit_user.home }}/cachedir"
+
 runtimedir: ""
-#runtimedir: "/grid/runtime"
+#runtimedir: "/arc/runtime"
 
 queues: 
-  - debug
+  - main
 
+##  Can be left empty if no accounting will be set up (advanced)
 hepspec: "" 

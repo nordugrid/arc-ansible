@@ -74,6 +74,7 @@
       - ansible_distribution_major_version|int == 11
 
 
+
   - name: Install emacs, wget, ntp, gpg (deb)
     package:
       name: ['emacs', 'wget', 'ntp','unattended-upgrades', 'gpg', 'time']
@@ -81,6 +82,14 @@
     when:
       - ansible_distribution == "Debian"
       - ansible_distribution_major_version|int == 11
+
+
+
+  - name: Install ntp for Debian < 12 (deb)
+    package:
+      name: 'ntp'
+      state: present
+    when: ansible_os_family == "Debian" and ansible_distribution_major_version|int < 12
 
 
   - name: Start and enable unattended-upgrades (debian)

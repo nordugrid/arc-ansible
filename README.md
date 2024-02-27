@@ -18,6 +18,8 @@ As part of this installation the server is set up with a host certificate genera
 
 You find the variables in group_vars/all file. Please edit these to fit your system. 
 
+You can look at the two example files all.deb_example or all.rhel_example for deb/rhel specific settings for the nordugrid_os{v,vname} in addition to the simplest setup for directories and queue (fork). Refer to the explanations below including the links to the arc configuration reference file for details. If you want to use one of the example files be sure to rename it to ```all``` before doing so, otherwise it will not be used. 
+
 
 ## General variables 
 
