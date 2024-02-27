@@ -1,0 +1,42 @@
+
+domain: ""
+
+default_user: 
+   user: "{{ ansible_user }}"
+   group: "{{ ansible_user }}"
+
+
+#any user that exists on whole cluster, can be the default ansible_user
+submit_user:
+   user: "{{ ansible_user }}"
+   group: "{{ ansible_user }}"
+
+
+############################
+## ARC
+############################
+nordugrid_os_dir: "rocky"
+nordugrid_os_v: "9"
+nordugrid_os_vname: ""
+
+nordugrid_release_v: "6.1"
+site_type: "default"
+
+arc_branch: "next"
+use_repo: "nordugrid-testing"
+
+remotedelivery: "no"
+scratchdir: ""
+
+lrms: "fork"
+
+controldir: ""
+sessionbasename: /arc/sessiondir
+cachebasename: "/arc/cachedir
+runtimedir: ""
+
+
+queues: 
+  - fork
+
+hepspec: "" 
