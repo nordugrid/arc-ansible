@@ -96,7 +96,7 @@
   shell: "arcctl test-ca hostcert -f -v 3600"
 
 - name: Run test-cert usercert install
-  shell: "arcctl test-ca usercert -i {{ default_user.user }} -f -v 3600"
+  shell: "arcctl test-ca usercert -i {{ submit_user.user }} -f -v 3600"
 
 
 ## Runtime dir
