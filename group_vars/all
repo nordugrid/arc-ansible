@@ -17,6 +17,8 @@ submit_user:
 ############################
 nordugrid_os_dir: "rocky"
 nordugrid_os_v: "9"
+#vname only for ubuntu and debian e.g. bullseye
+nordugrid_os_vname: ""
 
 ##For Debian and Ubuntu: 6.2
 ##For RHEL: 6.1
