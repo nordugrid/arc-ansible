@@ -11,6 +11,9 @@
     path: "{{sessionbasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
     state: directory
     recurse: yes
+    owner: "{{ submit_user.user }}"
+    group: "{{ submit_user.group }}"
+    mode: '0755'
   with_items: "{{ groups['datadelivery'] }}"
   when: sessionbasename is defined and  sessionbasename|length >0 
 
@@ -20,6 +23,9 @@
     path: "{{cachebasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
     state: directory
     recurse: yes
+    owner: "{{ submit_user.user }}"
+    group: "{{ submit_user.group }}"
+    mode: '0755'
   with_items: "{{ groups['datadelivery'] }}"
   when: cachebasename is defined and cachebasename|length >0
 
@@ -31,16 +37,18 @@
 ##################################################
 
 - name: Include installation play for standard installation from nordugrid repo (rhel)
-  include: install_arc_rhel.yml
+  include_tasks: install_arc_rhel.yml
   tags: 
     - installarc
   when: ansible_os_family == "RedHat"
 
 - name: Include installation play for standard installation from nordugrid repo (deb)
-  include: install_arc_deb.yml
+  include_tasks: install_arc_deb.yml
   tags: 
     - installarc
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_distribution == "Debian"
+    - ansible_distribution_major_version|int == 11
 
 - name: Template arc.conf (arc.conf.j2) file
   template: 
@@ -62,7 +70,9 @@
     name: igtf-policy-*
     state: present
     update_cache: yes
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_distribution == "Debian"
+    - ansible_distribution_major_version|int == 11
 
 
 - name: Install igtf package (deb)
@@ -70,12 +80,14 @@
     name: fetch-crl
     state: present
     update_cache: yes
-  when: ansible_os_family == "Debian"
   ignore_errors: yes
+  when:
+    - ansible_distribution == "Debian"
+    - ansible_distribution_major_version|int == 11
 
 
 - name: Install CA's
-  shell: "arcctl deploy igtf-ca classic"
+  shell: "arcctl deploy igtf-ca classic --installrepo igtf"
 
 - name: Run test-cert init
   shell: "arcctl test-ca init -f -v 3600"
@@ -84,14 +96,14 @@
   shell: "arcctl test-ca hostcert -f -v 3600"
 
 - name: Run test-cert usercert install
-  shell: "arcctl test-ca usercert -i {{ default_user.user }} -f -v 3600"
+  shell: "arcctl test-ca usercert -i {{ submit_user.user }} -f -v 3600"
 
 
 ## Runtime dir
 ###############
 
 - name: ATLAS specific RTEs
-  include: atlas.yml
+  include_tasks: atlas.yml
   tags:
     - installarc
     - runtime
@@ -113,9 +125,16 @@
 ## ARC test files
 #########################
 - name: Place testing scripts on frontend
-  include: arctesting.yml
+  include_tasks: arctesting.yml
   tags: arctesting
   when: (inventory_hostname in groups['frontend'])
 
 
+## Clean up BEARER_TOKEN
+##########################
+- name: Clean up BEARER_TOKEN from IM
+  lineinfile:
+    path: /etc/environment
+    state: absent
+    regexp: '^BEARER_TOKEN'
 ...

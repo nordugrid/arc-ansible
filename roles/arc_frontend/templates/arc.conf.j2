@@ -7,7 +7,7 @@ x509_host_key=/etc/grid-security/testCA-hostkey.pem
 file=/etc/grid-security/testCA.allowed-subjects                                          
 
 
-#To-do: need to insert default submit user here - take from EGI ansible scripts
+# Need to insert default submit user here - take from EGI ansible scripts
 [mapping]
 map_to_user=testers {{ submit_user.user }}:{{ submit_user.group }}
 

@@ -3,15 +3,15 @@
 - name: Copy testing files to arc frontend
   copy: 
     src: files/testing
-    dest: /home/{{ default_user.user }}
+    dest: "{{ submit_user.home }}"
     directory_mode: 
-    owner: "{{ default_user.user }}"
-    group: "{{ default_user.group }}"
+    owner: "{{ submit_user.user }}"
+    group: "{{ submit_user.group }}"
 
 - name: Also copy the cmd template
   template:
     src: templates/submit-cmd.sh.j2
-    dest:  /home/{{ default_user.user }}/testing/submit-cmd.sh
-    owner: "{{ default_user.user }}"
-    group: "{{ default_user.group }}"
+    dest:  "{{ submit_user.home }}/testing/submit-cmd.sh"
+    owner: "{{ submit_user.user }}"
+    group: "{{ submit_user.group }}"
 

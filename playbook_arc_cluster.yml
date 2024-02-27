@@ -21,19 +21,9 @@
     shell: timedatectl set-timezone Europe/Oslo
 
 
-  - name: Enable crb repo (el9)
-    shell: dnf config-manager --set-enabled crb
-    when: (ansible_os_family == "RedHat")  and ansible_distribution_major_version|int == 9
-
-
-  - name: Enable powertools repo (el8)
-    shell: dnf config-manager --set-enabled powertools
-    when: (ansible_os_family == "RedHat") and ansible_distribution_major_version|int == 8
-
-
   - name: Install emacs, wget, development tools, epel-release  rhel
     package:
-      name: ['emacs', 'wget', '@Development tools',epel-release]
+      name: ['emacs', 'wget', '@Development tools', 'epel-release', 'time']
       disablerepo: "nordugrid*"
       state: present
     when: (ansible_os_family == "RedHat") 
@@ -79,14 +69,19 @@
 
   - name: Update system if deb
     shell: apt-get update -y
-    when: ansible_os_family == "Debian"
+    when:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_major_version|int == 11
 
 
-  - name: Install emacs, wget, gnupg (deb)
+
+  - name: Install emacs, wget, ntp, gpg (deb)
     package:
-      name: ['emacs', 'wget', 'unattended-upgrades',  'gnupg']
+      name: ['emacs', 'wget', 'ntp','unattended-upgrades', 'gpg', 'time']
       state: present
-    when: ansible_os_family == "Debian"
+    when:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_major_version|int == 11
 
 
 
@@ -102,8 +97,10 @@
       name: unattended-upgrades
       enabled: yes
       state: started
-    when: ansible_os_family == "Debian"
-  
+    when:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_major_version|int == 11
+ 
 
   - name: Start ntp and yum-cron (el == 7)
     systemd:
@@ -120,17 +117,20 @@
       name: ntp
       enabled: yes
       state: started
-    when: ansible_os_family == "Debian" and ansible_distribution_major_version|int < 12
+    when:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_major_version|int == 11
 
 
-  - name: Add cluster-hostnames in hosts file
-    blockinfile:
-      path: /etc/hosts
-      block: |
-
-        {% for server in groups['all'] %}
-            {{ hostvars[server].ansible_host }} {{server }} 
-        {% endfor %}
+## Taken care of by Infrastructure Manager
+#  - name: Add cluster-hostnames in hosts file
+#    blockinfile:
+#      path: /etc/hosts
+#      block: |
+#
+#        {% for server in groups['all'] %}
+#            {{ hostvars[server].ansible_host }} {{server }}
+#        {% endfor %}
 
 
 
