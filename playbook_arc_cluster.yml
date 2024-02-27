@@ -82,12 +82,19 @@
     when: ansible_os_family == "Debian"
 
 
-  - name: Install emacs, wget, ntp (deb)
+  - name: Install emacs, wget, gnupg (deb)
     package:
-      name: ['emacs', 'wget', 'ntp','unattended-upgrades']
-      disablerepo: "nordugrid*"
+      name: ['emacs', 'wget', 'unattended-upgrades',  'gnupg']
       state: present
     when: ansible_os_family == "Debian"
+
+
+
+  - name: Install ntp for Debian < 12 (deb)
+    package:
+      name: 'ntp'
+      state: present
+    when: ansible_os_family == "Debian" and ansible_distribution_major_version|int < 12
 
 
   - name: Start and enable unattended-upgrades (debian)
@@ -113,7 +120,7 @@
       name: ntp
       enabled: yes
       state: started
-    when: ansible_os_family == "Debian"
+    when: ansible_os_family == "Debian" and ansible_distribution_major_version|int < 12
 
 
   - name: Add cluster-hostnames in hosts file

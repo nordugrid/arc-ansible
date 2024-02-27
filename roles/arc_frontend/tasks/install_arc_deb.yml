@@ -2,23 +2,67 @@
 # task for file installing ARC
 
 - name: Install nordugrid gpg key
-  apt_key: 
-    url: http://download.nordugrid.org/DEB-GPG-KEY-nordugrid-6.asc
-    state: present
+  shell: wget -q http://download.nordugrid.org/DEB-GPG-KEY-nordugrid-6.asc -O- | apt-key add -
+
+#- name: Install nordugrid gpg key
+#  apt_key: 
+#    url: http://download.nordugrid.org/DEB-GPG-KEY-nordugrid-6.asc
+#    state: present
 
 
 - name: Get deb repo file
   get_url:
-    url: https://download.nordugrid.org/packages/nordugrid-release/releases/6/debian/11/amd64/nordugrid-release_6~bpo11+1_all.deb
-    dest: /tmp/nordugrid-release_6~bpo11+1_all.deb
+    url: https://download.nordugrid.org/packages/nordugrid-release/releases/6/debian/{{nordugrid_os_v}}/amd64/nordugrid-release_6~bpo{{nordugrid_os_v}}+1_all.deb
+    dest: /tmp/nordugrid-release_6~bpo{{nordugrid_os_v}}+1_all.deb
 
 
 - name: Set up repo
-  shell: "dpkg -i /tmp/nordugrid-release_6~bpo11+1_all.deb"
+  shell: "dpkg -i /tmp/nordugrid-release_6~bpo{{nordugrid_os_v}}+1_all.deb"
 
 - name: Update debian
   apt:
      update_cache: yes
+
+
+
+######## Option1: ARC nightly installation ################
+- name: Create cron job for updating nightly date
+  copy:
+    dest: /etc/cron.daily/update-arc-nightly-time.sh
+    content: |
+      #!/bin/bash
+      arcrelease='ubuntu/16.04/amd64'
+      latestdate=$( wget -q -O - http://builds.nordugrid.org/nightlies/nordugrid-arc/next/ | sed -n 's/^.*<a.*>\(.*\)\/<\/a>.*$/\1/p' | sort | tail -1 )
+      repodir=/srv/nordugrid-nightlies
+      rm -rf $repodir; mkdir -p $repodir; cd $repodir
+      wget -q -r -nH --cut-dirs=8 --no-parent -l1 -A "*.deb, *.ddeb" http://builds.nordugrid.org/nightlies/nordugrid-arc/next/$latestdate/$arcrelease/
+      dpkg-scanpackages . /dev/null 2>/dev/null | gzip -9c > Packages.gz
+    mode: 0755
+  when: use_repo == "nordugrid-nightly"
+    
+- name: Trigger the nightly date
+  command: "/bin/sh /etc/cron.daily/update-arc-nightly-time.sh"
+  when: use_repo == "nordugrid-nightly"
+
+
+- name: Install nordugrid-nightly repo
+  copy:
+    dest: /etc/apt/sources.list.d/nordugrid-nightlies.list
+    content: |
+      deb [trusted=yes] file:/srv/nordugrid-nightlies ./
+  when: use_repo == "nordugrid-nightly"
+########## End option 1
+
+
+######## Option2: ARC testing installation ################
+- name: Install nordugrid-testing repo
+  copy:
+    dest: /etc/apt/sources.list.d/nordugrid-testing.list
+    content: |
+      deb http://download.nordugrid.org/repos/7/{{ nordugrid_os_dir }}/ {{nordugrid_os_vname}}-experimental main
+      deb-src http://download.nordugrid.org/repos/7/{{ nordugrid_os_dir }}/ {{nordugrid_os_vname}}-experimental main
+  when: use_repo == "nordugrid-testing"
+########## End option 2
 
 
 ### Install nordugrid-arc-arex
@@ -26,6 +70,7 @@
   apt: 
     name: nordugrid-arc-arex
     state: present
+    update_cache: true
     dpkg_options: 'force-confold'
 
 ### Install nordugrid-arc-client
@@ -33,6 +78,7 @@
   apt: 
     name: nordugrid-arc-client
     state: present
+    update_cache: true
     dpkg_options: 'force-confold'
 
 ...
