@@ -1,0 +1,92 @@
+
+# Example values
+# - localdomain
+# - example.com
+domain: "localdomain"
+
+# Example values
+# - slurm
+# - arcuser
+# Note: the user must exists on all nodes of the cluster
+submit_user:
+   user: "slurm"
+   group: "slurm"
+   home: "/home/slurm"
+
+############################
+## ARC
+############################
+# Example values
+# - rocky
+# - debian
+nordugrid_os_dir: "rocky"
+
+# Example values
+# - 9 (for Rocky)
+# - 11 (for Debian)
+nordugrid_os_v: "9"
+
+# Example values
+# - "" (for Rocky)
+# - bullseye (only valid for Debian)
+nordugrid_os_vname: ""
+
+# Example values
+# - 6.1 (for Rocky)
+# - 6.2 (for Debian)
+nordugrid_release_v: "6.1"
+
+# Example values
+# - default (non-wlcg site)
+# - atlas (wlcg-site)
+site_type: "default"
+
+arc_branch: "next"
+use_repo: "nordugrid-testing"
+
+# Example values
+# - yes
+# - no
+remotedelivery: "no"
+scratchdir: ""
+
+# Example values
+# - fork - simple forking of jobs to the same node as the server
+# - sge - (Sun/Oracle) Grid Engine
+# - condor - Condor
+# - pbs - PBS (covers Torque and other old PBS flavours e.g. OpenPBS, older PBSPro, etc)
+# - pbspro - Altair PBS Professional
+# - lsf - LSF
+# - ll - LoadLeveler
+# - slurm - SLURM
+# - boinc - Boinc
+# See: https://www.nordugrid.org/arc/arc7/admins/reference.html#lrms
+lrms: "slurm"
+
+# Example values
+# - ""
+# - /arc/control
+controldir: ""
+
+# Example values
+# - /grid/sessiondir
+# Note: folder must be available in all nodes (e.g. NFS mounted)
+sessionbasename: "{{ submit_user.home }}/sessiondir"
+
+# Example values
+# - /grid/cachedir
+# Note: folder must be available in all nodes (e.g. NFS mounted)
+cachebasename: "{{ submit_user.home }}/cachedir"
+
+# Example values
+# - ""
+# - /arc/runtime
+runtimedir: ""
+
+# See
+# https://www.nordugrid.org/arc/arc7/admins/reference.html#queue-name-block
+queues: 
+  - debug
+
+##  Can be left empty if no accounting will be set up (advanced)
+hepspec: "" 
