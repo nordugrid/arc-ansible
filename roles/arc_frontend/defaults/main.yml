@@ -5,6 +5,7 @@ nordugrid_os_vname: "{{ansible_distribution_release|lower}}"
 
 arc_branch: ""
 
+
 controldir: ""
 scratchdir: ""
 runtimedir: ""
