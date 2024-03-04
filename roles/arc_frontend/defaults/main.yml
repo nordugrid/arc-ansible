@@ -3,4 +3,18 @@ nordugrid_os_dir: "{% if ansible_os_family == 'RedHat' %}{% if ansible_distribut
 nordugrid_release_v: "{% if ansible_os_family == 'RedHat'}6.1{% elif ansible_os_family == 'Debian' %}6.2"
 nordugrid_os_vname: "{{ansible_distribution_release|lower}}"
 
+arc_branch: ""
+
+controldir: ""
+scratchdir: ""
+runtimedir: ""
+
+
+submit_user:
+   user: "{{ansible_user}}"
+   group: "{{ansible_user}}"
+   home: "/home/{{ansible_user}}"
+
+
+site_type: "default"
 
