@@ -4,6 +4,13 @@
 [datadelivery:children]
 frontend
 
+[workers]
+<your-server-name> ansible_host=<your-server-ip>
+<your-server-name> ansible_host=<your-server-ip>
+
+[workers:vars]
+ansible_ssh_common_args='-J cloudadm@<frontend-ip>'
+
 [all:vars]
 ansible_user=cloudadm
 ansible_python_interpreter=/usr/bin/python3
