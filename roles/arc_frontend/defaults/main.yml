@@ -41,6 +41,10 @@ nordugrid_release_v: "6.1"
 # - atlas (wlcg-site)
 site_type: "default"
 
+#Allowed values
+# - nordugrid
+# - nordugrid-testing
+# - nordugrid-nightlies
 arc_branch: "next"
 use_repo: "nordugrid-testing"
 
