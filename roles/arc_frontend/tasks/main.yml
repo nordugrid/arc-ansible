@@ -2,14 +2,12 @@
 ---
 # tasks file for ansible-role-arc-frontend
 
-
 - name: Include variables
   include_vars: 
     dir: vars
     extensions: 
      - 'yml'
     ignore_unknown_extensions: True
-
 
 
 ##################################################
