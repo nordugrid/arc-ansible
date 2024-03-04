@@ -5,19 +5,14 @@
 domain: "localdomain"
 
 
-default_user: 
-   user: "{{ ansible_user }}"
-   group: "{{ ansible_user }}"
-
-
 # Example values
 # - slurm
 # - arcuser
 # Note: the user must exists on all nodes of the cluster
 submit_user:
-   user: "{{default_user.user}}"
-   group: "{{default_user.group}}"
-   home: "/home/{{default_user.user}}"
+   user: "{{ansible_user}}"
+   group: "{{ansible_user}}"
+   home: "/home/{{ansible_user}}"
 
 
 # As of March 2024 ARC 7 is not yet officially released
