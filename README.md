@@ -123,6 +123,12 @@ What batch system you have. If no batch system connected, use "fork".
 Allowed values, see: http://www.nordugrid.org/arc/arc7/admins/reference.html#lrms
 
 
+### lrms_bin_path
+It is assumed that the LRMS bin folder is `/usr/bin`. If that's not the case please update `lrms_bin_path` accordingly (e.g. `lrms_bin_path: /usr/local/bin`)
+
+Allowed values, see: http://www.nordugrid.org/arc/arc7/admins/reference.html#lrms
+
+
 ### controldir
 ARCs job directory - storing all meta-data files related to a job. Local directory to the ARC server. 
 
