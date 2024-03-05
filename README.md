@@ -21,7 +21,7 @@ You find the variables in group_vars/all file. Please edit these to fit your sys
 You can look at the two example files all.deb_example or all.rhel_example for deb/rhel specific settings for the nordugrid_os{v,vname} in addition to the simplest setup for directories and queue (fork). Refer to the explanations below including the links to the arc configuration reference file for details. If you want to use one of the example files be sure to rename it to ```all``` before doing so, otherwise it will not be used. 
 
 
-## General variables 
+## General variables ```vars/general.yml```
 
 ### domain
 Domain name of the ARC server
@@ -45,42 +45,6 @@ submit_user:
 
 If the group-name is different than the user-name - make sure to put the correct one in the `group` variable. 
 
-### nordugrid_os_dir
-
-The os type of the ARC server. Used to point to the correct Nordugrid repo. 
-
-Accepted values are: "centos/centos-stream/rocky/fedora/debian/ubuntu"
-
-If `almalinux` - use `rocky` 
-
-
-### nordugrid_os_v
-The os version of the ARC server. Used to point to the correct Nordugrid repo. 
-
-Accepted values are found here: http://www.nordugrid.org/arc/arc7/common/repos/repository.html
-
-### nordugrid_release_v
-This is the release version of the Nordugrid release package (not the ARC version itself). 
-
-Typically 6.1 is the correct value for ARC 7. 
-
-
-### site_type
-
-This is a flag to trigger installation of ARC runtime environments needed for specific experiments. 
-Accepted values are currently `atlas` or `default`. 
-
-If you do not know what this means, select the ```default``` type
-
-### arc_branch
-
-What repo branch should ARC be of. The current released branch is "master", while the next upcoming major release can be found in "next". Currently ARC 7 is not yet released, and is in the "next" branch. Select this. 
-
-Example: 
-
-```
-arc_branch: "next"
-```
 
 ### use_repo
 What Nordugrid repo to install from. 
@@ -94,40 +58,71 @@ Accepted values:
 Before ARC 7 is released, use either nordugrid-testing or nordugrid-nightly. nordugrid-testing will be more stable than nordugrid-nightly
 
 
-## Variables used to build the ARC configuration file `/etc/arc.conf`
+### arc_branch
 
-### remotedelivery
-Should ARC have a stand-alone remote data delivery server. If it does then make sure that your inventory ansible file has a `datadelivery` group. 
+What repo branch should ARC be of. The current released branch is "master", while the next upcoming major release can be found in "next". Currently ARC 7 is not yet released, and is in the "next" branch. Select this. 
 
-Information about the configuration in arc.conf on the ARC-CE: http://www.nordugrid.org/arc/arc7/admins/reference.html#deliveryservice
+Example: 
 
-Information about how to set up and configure a standalone remote data delivery server: http://www.nordugrid.org/arc/arc7/tech/data/dds.html
+```
+arc_branch: "next"
+```
 
-Accepted values "yes", "no"
+### site_type
 
+This is a flag to trigger installation of ARC runtime environments needed for specific experiments. 
+Accepted values are currently `atlas` or `default`. 
 
-### remotedelivery_port
-What port the remote datadelivery server listens for datastaging requests. 
-
-Accepted values: Any port-number you are using, e.g. 443. 
-
-### scratchdir
-If the compute nodes have a scratch directory, add the path here. If not leave string empty. 
-
-http://www.nordugrid.org/arc/arc7/admins/reference.html#scratchdir
+If you do not know what this means, select the ```default``` type
 
 
-### lrms
-What batch system you have. If no batch system connected, use "fork". 
-
-Allowed values, see: http://www.nordugrid.org/arc/arc7/admins/reference.html#lrms
 
 
-### lrms_bin_path
-It is assumed that the LRMS bin folder is `/usr/bin`. If that's not the case please update `lrms_bin_path` accordingly (e.g. `lrms_bin_path: /usr/local/bin`)
 
-Allowed values, see: http://www.nordugrid.org/arc/arc7/admins/reference.html#lrms
+## Default variables ```defaults/main.yml```
+You should not need to edit the variables in the defaults file. Instead edit the variables in the `vars/´ folder. 
 
+### nordugrid_os_v
+The os version of the ARC server. Used to point to the correct Nordugrid repo. 
+
+Accepted values are found here: http://www.nordugrid.org/arc/arc7/common/repos/repository.html
+
+The value is automatically filled based on the OS version of your server. 
+
+
+### nordugrid_os_dir
+
+The os type of the ARC server. Used to point to the correct Nordugrid repo. 
+
+Accepted values are: "centos/centos-stream/rocky/fedora/debian/ubuntu"
+
+If `almalinux` - use `rocky` 
+
+The value is automatically filled based on the OS version of your server (ansible_os_family). 
+
+
+
+### nordugrid_release_v
+This is the release version of the Nordugrid release package (not the ARC version itself). 
+
+The value is 6.1 for ARC 7 on RedHat flavour servers, and 6.2 for ARC 7 on Debian flavour servers. 
+
+The value is automatically filled based on the OS version of your server (ansible_os_family). 
+
+
+### nordugrid_os_vname
+
+(ansible_distribution_release)
+
+The os version name of the ARC server, only relevant for Debian flavour servers. Used to point to the correct Nordugrid repo. 
+
+Accepted values are found here: http://www.nordugrid.org/arc/arc7/common/repos/repository.html - example `bookworm` for Debian. 
+
+The value is automatically filled based on the OS version of your server. 
+
+
+
+## Variables used to build the arc.conf ```vars/arc_config.yml```
 
 ### controldir
 ARCs job directory - storing all meta-data files related to a job. Local directory to the ARC server. 
@@ -136,12 +131,6 @@ If empty, ARC will use the default value "/var/spool/arc/jobstatus"
 
 http://www.nordugrid.org/arc/arc7/admins/reference.html#controldir
 
-### runtimedir
-What directory to use for user-defined runtime environments. 
-
-If left empty, no user-defined runtime directory will be created
-
-http://www.nordugrid.org/arc/arc7/admins/reference.html#runtimedir
 
 ### sessionbasename
 This variable is used to build a set of session directory folder names. 
@@ -164,6 +153,32 @@ Similar as sessiondir.
 
 http://www.nordugrid.org/arc/arc7/admins/reference.html#cachedir
 
+### scratchdir
+If the compute nodes have a scratch directory, add the path here. If not leave string empty. 
+
+http://www.nordugrid.org/arc/arc7/admins/reference.html#scratchdir
+
+
+### runtimedir
+What directory to use for user-defined runtime environments. 
+
+If left empty, no user-defined runtime directory will be created. Need to be set if site_type != default
+
+http://www.nordugrid.org/arc/arc7/admins/reference.html#runtimedir
+
+
+### lrms
+What batch system you have. If no batch system connected, use "fork". 
+
+Allowed values, see: http://www.nordugrid.org/arc/arc7/admins/reference.html#lrms
+
+
+### lrms_bin_path
+It is assumed that the LRMS bin folder is `/usr/bin`. If that's not the case please update `lrms_bin_path` accordingly (e.g. `lrms_bin_path: /usr/local/bin`)
+
+Allowed values, see: http://www.nordugrid.org/arc/arc7/admins/reference.html#lrms
+
+
 
 ### queues
 A list of batch system queues. If SLURM batch system, this is equivalent to the partition name(s). If fork, any uniqe string. Multivalued. 
@@ -176,6 +191,24 @@ Example:
 queues: 
   - main
 ```
+
+
+### remotedelivery
+Should ARC have a stand-alone remote data delivery server. If it does then make sure that your inventory ansible file has a `datadelivery` group. 
+
+Information about the configuration in arc.conf on the ARC-CE: http://www.nordugrid.org/arc/arc7/admins/reference.html#deliveryservice
+
+Information about how to set up and configure a standalone remote data delivery server: http://www.nordugrid.org/arc/arc7/tech/data/dds.html
+
+Accepted values "yes", "no"
+
+
+### remotedelivery_port
+What port the remote datadelivery server listens for datastaging requests. 
+
+Accepted values: Any port-number you are using, e.g. 443. 
+
+
 
 ### hepspec
 If you have benchmarked your servers, add the value here. The values must be in HEPSPEC value or Hepscore23 value. 
