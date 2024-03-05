@@ -19,7 +19,7 @@ lrms={{ lrms }}
 {% if hepspec is defined and hepspec|length %}
 benchmark=HEPSPEC:{{hepspec}}
 {% endif %}
-{% if lrms_bin_path is defined and lrms_bin_path|length %}
+{% if lrms_bin_path is defined and lrms_bin_path|length and lrms != 'fork' %}
 {{lrms}}_bin_path={{lrms_bin_path}}
 {% endif %}
 

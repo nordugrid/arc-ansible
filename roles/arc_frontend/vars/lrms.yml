@@ -1,2 +1,2 @@
-lrms_bin_path; "/usr/bin"
+lrms_bin_path: "/usr/local/bin"
 
