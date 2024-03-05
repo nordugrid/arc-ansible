@@ -12,12 +12,12 @@
 
 - name: Get deb repo file
   get_url:
-    url: https://download.nordugrid.org/packages/nordugrid-release/releases/6/debian/{{nordugrid_os_v}}/amd64/nordugrid-release_6~bpo{{nordugrid_os_v}}+1_all.deb
-    dest: /tmp/nordugrid-release_6~bpo{{nordugrid_os_v}}+1_all.deb
+    url: "https://download.nordugrid.org/packages/nordugrid-release/releases/{{ nordugrid_release_v }}/debian/{{nordugrid_os_v}}/amd64/nordugrid-release_{{ nordugrid_release_v }}~bpo{{nordugrid_os_v}}+1_all.deb"
+    dest: "/tmp/nordugrid-release_{{ nordugrid_release_v }}~bpo{{nordugrid_os_v}}+1_all.deb"
 
 
 - name: Set up repo
-  shell: "dpkg -i /tmp/nordugrid-release_6~bpo{{nordugrid_os_v}}+1_all.deb"
+  shell: "dpkg -i /tmp/nordugrid-release_{{ nordugrid_release_v }}~bpo{{nordugrid_os_v}}+1_all.deb"
 
 - name: Update debian
   apt:

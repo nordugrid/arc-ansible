@@ -1,6 +1,6 @@
 nordugrid_os_v: "{% if ansible_os_family == 'RedHat' %}{% if ansible_distribution_major_version|int == 7 %}el7{% else %}{{ansible_distribution_major_version|int}}{% endif %}{% elif ansible_os_family == 'Debian' %}{{ansible_distribution_major_version|int}}{% endif %}"
 nordugrid_os_dir: "{% if ansible_os_family == 'RedHat' %}{% if ansible_distribution|lower == 'almalinux' or ansible_distribution|lower == 'rocky' %}rocky{% elif ansible_distribution|lower == 'stream' %}centos-stream{% else %}centos{% endif %}{% elif ansible_os_family == 'Debian' %}{{ansible_distribution|lower}}{% endif %}"
-nordugrid_release_v: "{% if ansible_os_family == 'RedHat'}6.1{% elif ansible_os_family == 'Debian' %}6.2"
+nordugrid_release_v: "{% if ansible_os_family == 'RedHat' %}6.1{% elif ansible_os_family == 'Debian' %}6.2{% endif %}"
 nordugrid_os_vname: "{{ansible_distribution_release|lower}}"
 
 arc_branch: ""

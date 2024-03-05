@@ -6,7 +6,7 @@ domain: "localdomain"
 
 
 # Example values
-# - slurm
+# - almalinux
 # - arcuser
 # Note: the user must exists on all nodes of the cluster
 submit_user:
@@ -20,10 +20,11 @@ submit_user:
 # nordugrid-testing is more stable than nordugrid-nightlies
 use_repo: "nordugrid-testing"
 
-arc_branch: "{% if use_repo == 'nordugrid-testing' or use_repo == 'nordugrid-nightlies' %}'next'{%  else %}''{% endif %}"
+arc_branch: "{% if use_repo == 'nordugrid-testing' or use_repo == 'nordugrid-nightlies' %}next{% endif %}"
 
 
-# Sets up experiment specific RTE's - more to come
+# Sets up experiment specific RTE's - only ATLAS at the moment, more to come
+# If a value different that "default" is used, the runtimedir var must be set in arc_config.xml
 # Example values
 # - default (non-wlcg site)
 # - atlas (wlcg-site)
