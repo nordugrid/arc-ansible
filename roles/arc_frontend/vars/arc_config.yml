@@ -56,6 +56,11 @@ runtimedir: ""
 # - boinc - Boinc
 lrms: "slurm"
 
+
+# If the path is different than the default /usr/bin - please update this value
+lrms_bin_path: "/usr/bin"
+
+
 ## queue
 # See https://www.nordugrid.org/arc/arc7/admins/reference.html#queue-name-block
 # For SLURM must reflect the actual partition the jobs will run in. 
