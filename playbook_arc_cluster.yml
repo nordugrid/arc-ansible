@@ -27,8 +27,8 @@
     - arc
 
   vars_files:
-    - /vars/general.yml
-    - /vars/arc_config.yml
+    - roles/arc_frontend/vars/general.yml
+    - roles/arc_frontend/vars/arc_config.yml
 
 
   tasks:
