@@ -77,51 +77,6 @@ If you do not know what this means, select the ```default``` type
 
 
 
-
-
-## Default variables ```defaults/main.yml```
-You should not need to edit the variables in the defaults file. Instead edit the variables in the `vars/´ folder. 
-
-### nordugrid_os_v
-The os version of the ARC server. Used to point to the correct Nordugrid repo. 
-
-Accepted values are found here: http://www.nordugrid.org/arc/arc7/common/repos/repository.html
-
-The value is automatically filled based on the OS version of your server. 
-
-
-### nordugrid_os_dir
-
-The os type of the ARC server. Used to point to the correct Nordugrid repo. 
-
-Accepted values are: "centos/centos-stream/rocky/fedora/debian/ubuntu"
-
-If `almalinux` - use `rocky` 
-
-The value is automatically filled based on the OS version of your server (ansible_os_family). 
-
-
-
-### nordugrid_release_v
-This is the release version of the Nordugrid release package (not the ARC version itself). 
-
-The value is 6.1 for ARC 7 on RedHat flavour servers, and 6.2 for ARC 7 on Debian flavour servers. 
-
-The value is automatically filled based on the OS version of your server (ansible_os_family). 
-
-
-### nordugrid_os_vname
-
-(ansible_distribution_release)
-
-The os version name of the ARC server, only relevant for Debian flavour servers. Used to point to the correct Nordugrid repo. 
-
-Accepted values are found here: http://www.nordugrid.org/arc/arc7/common/repos/repository.html - example `bookworm` for Debian. 
-
-The value is automatically filled based on the OS version of your server. 
-
-
-
 ## Variables used to build the arc.conf ```vars/arc_config.yml```
 
 ### controldir
@@ -220,6 +175,54 @@ The hepspec is used in the arc.conf as the `benchmark` value in the `queue` bloc
 Example: 
 
 ```hepspec: 14.998```
+
+
+
+
+## Default variables ```defaults/main.yml```
+You should not need to edit the variables in the defaults file. Instead edit the variables in the `vars/´ folder. 
+
+### nordugrid_os_v
+The os version of the ARC server. Used to point to the correct Nordugrid repo. 
+
+Accepted values are found here: http://www.nordugrid.org/arc/arc7/common/repos/repository.html
+
+The value is automatically filled based on the OS version of your server. 
+
+
+### nordugrid_os_dir
+
+The os type of the ARC server. Used to point to the correct Nordugrid repo. 
+
+Accepted values are: "centos/centos-stream/rocky/fedora/debian/ubuntu"
+
+If `almalinux` - use `rocky` 
+
+The value is automatically filled based on the OS version of your server (ansible_os_family). 
+
+
+
+### nordugrid_release_v
+This is the release version of the Nordugrid release package (not the ARC version itself). 
+
+The value is 6.1 for ARC 7 on RedHat flavour servers, and 6.2 for ARC 7 on Debian flavour servers. 
+
+The value is automatically filled based on the OS version of your server (ansible_os_family). 
+
+
+### nordugrid_os_vname
+
+(ansible_distribution_release)
+
+The os version name of the ARC server, only relevant for Debian flavour servers. Used to point to the correct Nordugrid repo. 
+
+Accepted values are found here: http://www.nordugrid.org/arc/arc7/common/repos/repository.html - example `bookworm` for Debian. 
+
+The value is automatically filled based on the OS version of your server. 
+
+
+
+
 
 # Testing the installation
 Once you have run the playbook you can submit a test-job using the ARC client installed on the same machine as the ARC server (done by this ansible playbook). 
