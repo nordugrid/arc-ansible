@@ -31,6 +31,7 @@
     - roles/arc_frontend/vars/arc_config.yml
 
 
+
   tasks:
 
    - name: Check dependent variables 
