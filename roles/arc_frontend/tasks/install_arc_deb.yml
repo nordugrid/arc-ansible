@@ -25,7 +25,21 @@
 
 
 
-######## Option1: ARC nightly installation ################
+######## Option1: ARC release installation ################
+- name: Install nordugrid repo
+  copy:
+    dest: /etc/apt/sources.list.d/nordugrid.list
+    content: |
+      deb http://download.nordugrid.org/repos/7/{{ nordugrid_os_dir }}/ {{nordugrid_os_vname}} main
+      deb-src http://download.nordugrid.org/repos/7/{{ nordugrid_os_dir }}/ {{nordugrid_os_vname}} main
+
+      deb http://download.nordugrid.org/repos/7/{{ nordugrid_os_dir }}/ {{nordugrid_os_vname}}-updates main
+      deb-src http://download.nordugrid.org/repos/7/{{ nordugrid_os_dir }}/ {{nordugrid_os_vname}}-updates main
+  when: use_repo == "nordugrid"
+########## End option 1
+
+
+######## Option2: ARC nightly installation ################
 - name: Create cron job for updating nightly date
   copy:
     dest: /etc/cron.daily/update-arc-nightly-time.sh
@@ -51,10 +65,10 @@
     content: |
       deb [trusted=yes] file:/srv/nordugrid-nightlies ./
   when: use_repo == "nordugrid-nightly"
-########## End option 1
+########## End option 2
 
 
-######## Option2: ARC testing installation ################
+######## Option3: ARC testing installation ################
 - name: Install nordugrid-testing repo
   copy:
     dest: /etc/apt/sources.list.d/nordugrid-testing.list
@@ -62,7 +76,7 @@
       deb http://download.nordugrid.org/repos/7/{{ nordugrid_os_dir }}/ {{nordugrid_os_vname}}-experimental main
       deb-src http://download.nordugrid.org/repos/7/{{ nordugrid_os_dir }}/ {{nordugrid_os_vname}}-experimental main
   when: use_repo == "nordugrid-testing"
-########## End option 2
+########## End option 3
 
 
 ### Install nordugrid-arc-arex
