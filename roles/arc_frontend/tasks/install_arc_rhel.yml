@@ -47,7 +47,6 @@
 ########## End option 1
 
 
-
 ######## Option2: ARC nightly installation ################
 - name: Create cron job for updating nightly date
   template: 
@@ -101,7 +100,6 @@
      gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-nordugrid-6
   when: use_repo == "nordugrid-testing"
 ########## End option 3
-
 
 - name: Update yum cache
   command: "yum makecache"

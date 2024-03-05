@@ -1,0 +1,34 @@
+
+# Example values
+# - localdomain
+# - example.com
+domain: "localdomain"
+
+
+# Example values
+# - almalinux
+# - arcuser
+# Note: the user must exists on all nodes of the cluster
+submit_user:
+   user: "{{ansible_user}}"
+   group: "{{ansible_user}}"
+   home: "/home/{{ansible_user}}"
+
+
+# As of March 2024 ARC 7 is not yet officially released
+# Use either nordugrid-testing or nordugrid-nightlies releases
+# nordugrid-testing is more stable than nordugrid-nightlies
+use_repo: "nordugrid-testing"
+
+arc_branch: "{% if use_repo == 'nordugrid-testing' or use_repo == 'nordugrid-nightlies' %}next{% endif %}"
+
+
+# Sets up experiment specific RTE's - only ATLAS at the moment, more to come
+# If a value different that "default" is used, the runtimedir var must be set in arc_config.xml
+# Example values
+# - default (non-wlcg site)
+# - atlas (wlcg-site)
+site_type: "default"
+
+
+
