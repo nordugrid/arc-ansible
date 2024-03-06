@@ -25,13 +25,6 @@
   tags: 
     - installarc
     - arc
-
-  vars_files:
-    - roles/arc_frontend/vars/general.yml
-    - roles/arc_frontend/vars/arc_config.yml
-
-
-
   tasks:
 
    - name: Check dependent variables 
@@ -39,9 +32,8 @@
        msg: "You have variable site_type different than default: {{site_type}} but not set the runtimedir var. This must be set as site_type different than default will install files in the runtimedir."
      failed_when: runtimedir|length == 0 and site_type != "default"
 
-
   roles:
-    - arc_frontend
-
-
-
+    - role: arc_frontend
+      sessionbasename: '/home/sessiondir'
+      cachebasename:   '/home/cachedir'
+      lrms_bin_path:   '/usr/local/bin'
