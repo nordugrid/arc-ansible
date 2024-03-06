@@ -21,7 +21,6 @@ Here is an example how on to use this role:
 
 - hosts: all
   name: ARC installation
-  gather_facts: yes
   become: yes
   roles:
     - role: arc_frontend
