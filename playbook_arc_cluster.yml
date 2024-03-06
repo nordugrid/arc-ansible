@@ -27,6 +27,5 @@
     - arc
   roles:
     - role: arc_frontend
-      sessionbasename: '/home/sessiondir'
-      cachebasename:   '/home/cachedir'
-      lrms_bin_path:   '/usr/local/bin'
+      sessionbasename: '/mnt/grid/sessiondir'
+      cachebasename:   '/mnt/grid/cachedir'

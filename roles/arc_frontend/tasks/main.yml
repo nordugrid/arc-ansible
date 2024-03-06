@@ -2,17 +2,41 @@
 ---
 # tasks file for ansible-role-arc-frontend
 
+###################################
+## Fast fail
+###################################
+
+- name: Check dependent variables
+  fail:
+    msg: "You have variable site_type different than default: {{site_type}} but not set the runtimedir var. This must be set as site_type different than default will install files in the runtimedir."
+  when: runtimedir|length == 0 and site_type != "default"
+
+- name: Check sessiondir
+  stat:
+    path: "{{ sessionbasename | dirname }}"
+  register: st
+
+- name: Check sessiondir
+  fail:
+    msg: "The parent folder of {{ sessionbasename }} does not exist. It must be an existing shared filesystem that all compute nodes have access to."
+  when: not st.stat.exists
+
+- name: Check cachedir
+  stat:
+    path: "{{ cachebasename | dirname }}"
+  register: st
+
+- name: Check cachedir
+  fail:
+    msg: "The parent folder of {{ cachebasename }} does not exist. It must be an existing shared filesystem that all compute nodes have access to."
+  when: not st.stat.exists
+
 
 ###################################
 ## PREPS
 ###################################
 - name: Run preparatory steps
   include_tasks: preps.yml
-
-- name: Check dependent variables
-  fail:
-    msg: "You have variable site_type different than default: {{site_type}} but not set the runtimedir var. This must be set as site_type different than default will install files in the runtimedir."
-  when: runtimedir|length == 0 and site_type != "default"
 
 
 ##################################################

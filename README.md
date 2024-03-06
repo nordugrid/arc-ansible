@@ -25,8 +25,8 @@ You
   become: yes
   roles:
     - role: arc_frontend
-      sessionbasename: '/nfs-folder/sessiondir'
-      cachebasename:   '/nfs-folder/cachedir'
+      sessionbasename: '/mnt/grid/sessiondir'
+      cachebasename:   '/mnt/grid/cachedir'
       lrms_bin_path:   '/usr/local/bin'
 
 ```
