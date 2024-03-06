@@ -19,7 +19,7 @@ You
 
 ```yaml
 
-- hosts: frontend
+- hosts: all
   name: ARC installation
   gather_facts: yes
   become: yes

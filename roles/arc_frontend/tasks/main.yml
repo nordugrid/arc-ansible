@@ -48,4 +48,4 @@
   include_tasks: arc.yml
   tags: 
     - installarc
-  when: inventory_hostname in groups["frontend"]
+  when: inventory_hostname in groups['lrms_server']

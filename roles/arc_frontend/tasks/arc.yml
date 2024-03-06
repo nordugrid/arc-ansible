@@ -125,7 +125,7 @@
 - name: Place testing scripts on frontend
   include_tasks: arctesting.yml
   tags: arctesting
-  when: (inventory_hostname in groups['frontend'])
+  when: inventory_hostname in groups['lrms_server']
 
 
 ## Clean up BEARER_TOKEN
