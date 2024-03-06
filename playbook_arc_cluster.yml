@@ -1,24 +1,6 @@
 ---
 
-#########################################
-##    Some preps - PLAY 1
-#########################################
-
 - hosts: all
-  name: preps
-  gather_facts: yes
-  become: yes
-  tags: prepare
-
-  tasks:
-
-
-
-############################################
-##    ARC installation and related - PLAY 2
-############################################
-
-- hosts: frontend
   name: ARC installation
   gather_facts: yes
   become: yes
