@@ -25,13 +25,6 @@
   tags: 
     - installarc
     - arc
-  tasks:
-
-   - name: Check dependent variables 
-     debug: 
-       msg: "You have variable site_type different than default: {{site_type}} but not set the runtimedir var. This must be set as site_type different than default will install files in the runtimedir."
-     failed_when: runtimedir|length == 0 and site_type != "default"
-
   roles:
     - role: arc_frontend
       sessionbasename: '/home/sessiondir'

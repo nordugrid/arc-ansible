@@ -9,6 +9,11 @@
 - name: Run preparatory steps
   include_tasks: preps.yml
 
+- name: Check dependent variables
+  fail:
+    msg: "You have variable site_type different than default: {{site_type}} but not set the runtimedir var. This must be set as site_type different than default will install files in the runtimedir."
+  when: runtimedir|length == 0 and site_type != "default"
+
 
 ##################################################
 ## ENSURE shared storage ARC dirs are present
