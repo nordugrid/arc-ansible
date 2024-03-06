@@ -2,7 +2,6 @@
 
 - hosts: all
   name: ARC installation
-  gather_facts: yes
   become: yes
   tags: 
     - installarc
