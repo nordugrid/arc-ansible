@@ -1,47 +1,13 @@
 ---
 
-#########################################
-##    Some preps - PLAY 1
-#########################################
-
 - hosts: all
-  name: preps
-  gather_facts: yes
-  become: yes
-  tags: prepare
-
-  tasks:
-
-
-
-############################################
-##    ARC installation and related - PLAY 2
-############################################
-
-- hosts: frontend
   name: ARC installation
-  gather_facts: yes
   become: yes
   tags: 
     - installarc
     - arc
-
-  vars_files:
-    - roles/arc_frontend/vars/general.yml
-    - roles/arc_frontend/vars/arc_config.yml
-
-
-
-  tasks:
-
-   - name: Check dependent variables 
-     debug: 
-       msg: "You have variable site_type different than default: {{site_type}} but not set the runtimedir var. This must be set as site_type different than default will install files in the runtimedir."
-     failed_when: runtimedir|length == 0 and site_type != "default"
-
-
   roles:
-    - arc_frontend
-
-
-
+    - role: arc_frontend
+      sessionbasename: '/mnt/grid/sessiondir'
+      cachebasename:   '/mnt/grid/cachedir'
+      lrms:            'slurm'

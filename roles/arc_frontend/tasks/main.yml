@@ -2,146 +2,50 @@
 ---
 # tasks file for ansible-role-arc-frontend
 
+###################################
+## Fast fail
+###################################
+
+- name: Check dependent variables
+  fail:
+    msg: "You have variable site_type different than default: {{site_type}} but not set the runtimedir var. This must be set as site_type different than default will install files in the runtimedir."
+  when: runtimedir|length == 0 and site_type != "default"
+
+- name: Check sessiondir
+  stat:
+    path: "{{ sessionbasename | dirname }}"
+  register: st
+
+- name: Check sessiondir
+  fail:
+    msg: "The parent folder of {{ sessionbasename }} does not exist. It must be an existing shared filesystem that all compute nodes have access to."
+  when: not st.stat.exists
+
+- name: Check cachedir
+  stat:
+    path: "{{ cachebasename | dirname }}"
+  register: st
+
+- name: Check cachedir
+  fail:
+    msg: "The parent folder of {{ cachebasename }} does not exist. It must be an existing shared filesystem that all compute nodes have access to."
+  when: not st.stat.exists
+
 
 ###################################
-## PREPS
+## Prepare all nodes
 ###################################
+
 - name: Run preparatory steps
   include_tasks: preps.yml
 
 
 ##################################################
-## ENSURE shared storage ARC dirs are present
+## Install ARC on the frontend
 ##################################################
 
-- name: Create sessiondirs for nfs mounted sessiondirs
-  file: 
-    path: "{{sessionbasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
-    state: directory
-    recurse: yes
-    owner: "{{ submit_user.user }}"
-    group: "{{ submit_user.group }}"
-    mode: '0755'
-  with_items: "{{ groups['datadelivery'] }}"
-  when: sessionbasename is defined and  sessionbasename|length >0 
-
-
-- name: Create cachedirs for nfs mounted cachedirs
-  file: 
-    path: "{{cachebasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
-    state: directory
-    recurse: yes
-    owner: "{{ submit_user.user }}"
-    group: "{{ submit_user.group }}"
-    mode: '0755'
-  with_items: "{{ groups['datadelivery'] }}"
-  when: cachebasename is defined and cachebasename|length >0
-
-
-
-
-##################################################
-## INSTALLATION AND CONFIGURATION OF ARC
-##################################################
-
-- name: Include installation play for standard installation from nordugrid repo (rhel)
-  include_tasks: install_arc_rhel.yml
+- name: Install ARC
+  include_tasks: arc.yml
   tags: 
     - installarc
-  when: ansible_os_family == "RedHat"
-
-- name: Include installation play for standard installation from nordugrid repo (deb)
-  include_tasks: install_arc_deb.yml
-  tags: 
-    - installarc
-  when:
-    - ansible_os_family == "Debian"
-
-
-- name: Template arc.conf (arc.conf.j2) file
-  template: 
-    backup: yes
-    src: arc.conf.j2
-    dest: /etc/arc.conf 
-    owner: root
-    group: root
-    mode: '0644'
-  tags: 
-    - installarc
-    - arcconf
-  notify:
-    - Restart ARC
-
-
-- name: Install igtf package (deb)
-  apt:
-    name: igtf-policy-*
-    state: present
-    update_cache: yes
-  when:
-    - ansible_os_family == "Debian"
-
-
-- name: Install igtf package (deb)
-  apt:
-    name: fetch-crl
-    state: present
-    update_cache: yes
-  ignore_errors: yes
-  when:
-    - ansible_os_family == "Debian"
-
-
-- name: Install CA's
-  shell: "arcctl deploy igtf-ca classic --installrepo igtf"
-
-- name: Run test-cert init
-  shell: "arcctl test-ca init -f -v 3600"
-
-- name: Run test-cert hostcert
-  shell: "arcctl test-ca hostcert -f -v 3600"
-
-- name: Run test-cert usercert install
-  shell: "arcctl test-ca usercert -i {{ submit_user.user }} -f -v 3600"
-
-
-## Runtime dir
-###############
-
-
-- name: ATLAS specific RTEs
-  include_tasks: atlas.yml
-  tags:
-    - installarc
-    - runtime
-    - atlas
-    - atlas_frontend
-  when: site_type == "atlas" and (runtimedir is defined and runtimedir|length > 0)
-
-
-## Attempt to start ARC
-##########################
-
-- name: Start ARC
-  shell: "arcctl service start -a"
-  ignore_errors: yes
-  
-
-
-#########################
-## ARC test files
-#########################
-- name: Place testing scripts on frontend
-  include_tasks: arctesting.yml
-  tags: arctesting
-  when: (inventory_hostname in groups['frontend'])
-
-
-## Clean up BEARER_TOKEN
-##########################
-- name: Clean up BEARER_TOKEN from IM
-  lineinfile:
-    path: /etc/environment
-    state: absent
-    regexp: '^BEARER_TOKEN'
-...
+  when: inventory_hostname in groups['lrms_server']

@@ -3,19 +3,113 @@ nordugrid_os_dir: "{% if ansible_os_family == 'RedHat' %}{% if ansible_distribut
 nordugrid_release_v: "{% if ansible_os_family == 'RedHat' %}6.1{% elif ansible_os_family == 'Debian' %}6.2{% endif %}"
 nordugrid_os_vname: "{{ansible_distribution_release|lower}}"
 
-arc_branch: ""
+# Example values
+# - localdomain
+# - example.com
+domain: "localdomain"
 
 
-controldir: ""
-scratchdir: ""
-runtimedir: ""
-
-
+# Example values
+# - almalinux
+# - arcuser
+# Note: the user must exists on all nodes of the cluster
 submit_user:
    user: "{{ansible_user}}"
    group: "{{ansible_user}}"
    home: "/home/{{ansible_user}}"
 
 
+# As of March 2024 ARC 7 is not yet officially released
+# Use either nordugrid-testing or nordugrid-nightlies releases
+# nordugrid-testing is more stable than nordugrid-nightlies
+use_repo: "nordugrid-testing"
+
+arc_branch: "{% if use_repo == 'nordugrid-testing' or use_repo == 'nordugrid-nightlies' %}next{% endif %}"
+
+
+# Sets up experiment specific RTE's - only ATLAS at the moment, more to come
+# If a value different that "default" is used, the runtimedir var must be set in arc_config.xml
+# Example values
+# - default (non-wlcg site)
+# - atlas (wlcg-site)
 site_type: "default"
 
+
+
+############################
+## ARC CONFIG
+############################
+
+## controldir
+# See http://www.nordugrid.org/arc/arc7/admins/reference.html#controldir
+# If left emtpy the arc.conf option will get the default value /var/spool/arc/jobstatus
+# Example values
+# - ""
+# - /arc/control
+controldir: ""
+
+
+## sessiondir
+# See http://www.nordugrid.org/arc/arc7/admins/reference.html#sessiondir
+# If left empty the arc.conf option will get the default value /var/spool/arc/sessiondir
+# Note: This playbook assumes folder alread is available in all nodes (e.g. NFS mounted)
+# Example values
+# - /grid/sessiondir
+sessionbasename: "/grid/sessiondir"
+
+
+## cachedir
+# See http://www.nordugrid.org/arc/arc7/admins/reference.html#cachedir
+# Note: This playbook assumes folder alread is available in all nodes (e.g. NFS mounted)
+# Must be specified (no default value)
+# Example values
+# - /grid/cachedir
+# Note: folder must be available in all nodes (e.g. NFS mounted)
+cachebasename: "/grid/cachedir"
+
+## scratchdir
+# See http://www.nordugrid.org/arc/arc7/admins/reference.html#scratchdir
+# If the compute nodes have a local scratch directory, enter the path here
+scratchdir: ""
+
+
+## runtimedir
+# See: http://www.nordugrid.org/arc/arc7/admins/reference.html#runtimedir
+# If site_type != default, please ensure you have a runtime directory
+# Example values
+# - /arc/runtime
+runtimedir: ""
+
+## lrms
+# See: https://www.nordugrid.org/arc/arc7/admins/reference.html#lrms
+# Allowed values
+# - fork - simple forking of jobs to the same node as the server
+# - sge - (Sun/Oracle) Grid Engine
+# - condor - Condor
+# - pbs - PBS (covers Torque and other old PBS flavours e.g. OpenPBS, older PBSPro, etc)
+# - pbspro - Altair PBS Professional
+# - lsf - LSF
+# - ll - LoadLeveler
+# - slurm - SLURM
+# - boinc - Boinc
+lrms: "slurm"
+
+
+# If the path is different than the default /usr/bin - please update this value
+lrms_bin_path: "/usr/bin"
+
+
+## queue
+# See https://www.nordugrid.org/arc/arc7/admins/reference.html#queue-name-block
+# For SLURM must reflect the actual partition the jobs will run in.
+queues:
+  - debug
+
+
+# Advanced option
+# Yes if you have set up separate servers for ARC data delivery.
+# Will fill in the arex/datastaging block with the adress of the servers - assumes this is configured in your ansible inventory
+# Allowed values:
+# - yes
+# - no
+remotedelivery: "no"
