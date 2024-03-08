@@ -27,7 +27,7 @@ Here is an example how on to use this role:
       sessionbasename: '/mnt/grid/sessiondir'
       cachebasename:   '/mnt/grid/cachedir'
       lrms_bin_path:   '/usr/local/bin'
-
+      lrms:            'slurm'
 ```
 
 ## General variables

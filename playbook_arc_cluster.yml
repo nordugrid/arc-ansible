@@ -10,3 +10,4 @@
     - role: arc_frontend
       sessionbasename: '/mnt/grid/sessiondir'
       cachebasename:   '/mnt/grid/cachedir'
+      lrms:            'slurm'
