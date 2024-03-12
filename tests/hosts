@@ -1,15 +1,15 @@
-[frontend]
+[lrms_server]
 <your-server-name> ansible_host=<your-server-ip>
 
 [datadelivery:children]
-frontend
+lrms_server
 
-[workers]
+[lrms_wns]
 <your-server-name> ansible_host=<your-server-ip>
 <your-server-name> ansible_host=<your-server-ip>
 
-[workers:vars]
-ansible_ssh_common_args='-J cloudadm@<frontend-ip>'
+[lrms_wns:vars]
+ansible_ssh_common_args='-J cloudadm@<lrms_server-ip>'
 
 [all:vars]
 ansible_user=cloudadm
