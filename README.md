@@ -23,12 +23,14 @@ Here is an example how on to use this role:
   name: ARC installation
   become: yes
   roles:
-    - role: arc_frontend
+    - role: arc-ansible
       sessionbasename: '/mnt/grid/sessiondir'
       cachebasename:   '/mnt/grid/cachedir'
       lrms_bin_path:   '/usr/local/bin'
       lrms:            'slurm'
 ```
+
+This example playbook is available in the `tests` folder.
 
 ## General variables
 

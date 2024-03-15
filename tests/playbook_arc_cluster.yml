@@ -7,7 +7,7 @@
     - installarc
     - arc
   roles:
-    - role: arc_frontend
+    - role: arc-ansible
       sessionbasename: '/mnt/grid/sessiondir'
       cachebasename:   '/mnt/grid/cachedir'
       lrms:            'slurm'
