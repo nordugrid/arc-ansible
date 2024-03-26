@@ -1,0 +1,19 @@
+galaxy_info:
+  author: ["maiken.pedersen@usit.uio.no", "sebastian.luna.valero@egi.eu"]
+  description: Install ARC
+  min_ansible_version: 2.0
+  platforms:
+  - name: Debian
+    versions:
+    - bullseye
+  - name: EL
+    versions:
+    - 7
+    - 8
+    - 9
+  galaxy_tags:
+    - arc
+    - lrms
+dependencies:
+  - { role: 'geerlingguy.ntp', ntp_config_server: [ntp.upv.es, ntp.uv.es] }
+  - { role: 'grycap.ssh', ssh_type_of_node: "{{ htcondor_type_of_node }}", ssh_user: "{{ htcondor_ssh_user }}" }
