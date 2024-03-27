@@ -7,7 +7,7 @@
 
 - name: Create sessiondirs for nfs mounted sessiondirs
   file: 
-    path: "{{sessionbasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
+    path: "{{ sessionbasename }}/sessiondir-{{ item }}"
     state: directory
     recurse: yes
     owner: "{{ submit_user.user }}"
@@ -19,7 +19,7 @@
 
 - name: Create cachedirs for nfs mounted cachedirs
   file: 
-    path: "{{cachebasename}}{{ item | regex_search('(\\d+)(?!.*\\d)') }}"
+    path: "{{ cachebasename }}/cachedir-{{ item }}"
     state: directory
     recurse: yes
     owner: "{{ submit_user.user }}"

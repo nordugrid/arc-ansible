@@ -13,7 +13,7 @@
 
 - name: Check sessiondir
   stat:
-    path: "{{ sessionbasename | dirname }}"
+    path: "{{ sessionbasename }}"
   register: st
 
 - name: Check sessiondir
@@ -23,7 +23,7 @@
 
 - name: Check cachedir
   stat:
-    path: "{{ cachebasename | dirname }}"
+    path: "{{ cachebasename }}"
   register: st
 
 - name: Check cachedir
