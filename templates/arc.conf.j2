@@ -31,7 +31,7 @@ controldir={{ controldir }}
 {% if groups['datadelivery'] is defined %}
 {% for server in groups['datadelivery' ] %}
 {% if sessionbasename is defined and sessionbasename|length %}
-sessiondir={{ sessionbasename }}{{ server | regex_search('(\\d+)(?!.*\\d)') }}
+sessiondir={{ sessionbasename }}/sessiondir-{{ server }}
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -48,7 +48,7 @@ scratchdir={{ scratchdir }}
 {% if groups['datadelivery'] is defined %}
 {% for server in groups['datadelivery'] %}
 {% if cachebasename is defined and cachebasename|length %}
-cachedir={{ cachebasename }}{{ server | regex_search('(\\d+)(?!.*\\d)') }}
+cachedir={{ cachebasename }}/cachedir-{{ server }}
 {% endif %}
 {% endfor %}
 {% endif %}
