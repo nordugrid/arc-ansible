@@ -70,6 +70,7 @@ deliveryservice=http://{{ hostvars[server].ansible_host }}:{{remotedelivery_port
 deliveryservice=http://{{ hostvars[server].ansible_host }}:{{remotedelivery_port}}/datadeliveryservice
 {% endfor %}
 {% endif %}
+{% endif %}
 
 
 [arex/ws]
