@@ -13,7 +13,7 @@
     owner: "{{ submit_user.user }}"
     group: "{{ submit_user.group }}"
     mode: '0755'
-  with_items: "{{ groups['datadelivery'] }}"
+  with_items: "{% if groups['datadelivery'] is defined %}{{ groups['datadelivery'] }}{% else %}{{ groups['lrms_server'] }}{% endif %}"
   when: sessionbasename is defined and  sessionbasename|length >0 
 
 
@@ -25,7 +25,7 @@
     owner: "{{ submit_user.user }}"
     group: "{{ submit_user.group }}"
     mode: '0755'
-  with_items: "{{ groups['datadelivery'] }}"
+  with_items: "{% if groups['datadelivery'] is defined %}{{ groups['datadelivery'] }}{% else %}{{ groups['lrms_server'] }}{% endif %}"
   when: cachebasename is defined and cachebasename|length >0
 
 
