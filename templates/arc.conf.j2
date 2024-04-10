@@ -30,9 +30,11 @@ controldir={{ controldir }}
 
 {% if groups['datadelivery'] is defined %}
 {% for server in groups['datadelivery' ] %}
-{% if sessionbasename is defined and sessionbasename|length %}
 sessiondir={{ sessionbasename }}/sessiondir-{{ server }}
-{% endif %}
+{% endfor %}
+{% else %}
+{% for server in groups['lrms_server' ] %}
+sessiondir={{ sessionbasename }}/sessiondir-{{ server }}
 {% endfor %}
 {% endif %}
 
@@ -47,9 +49,11 @@ scratchdir={{ scratchdir }}
 [arex/cache]
 {% if groups['datadelivery'] is defined %}
 {% for server in groups['datadelivery'] %}
-{% if cachebasename is defined and cachebasename|length %}
 cachedir={{ cachebasename }}/cachedir-{{ server }}
-{% endif %}
+{% endfor %}
+{% else %}
+{% for server in groups['lrms_server' ] %}
+cachedir={{ cachebasename }}/cachedir-{{ server }}
 {% endfor %}
 {% endif %}
 
@@ -57,9 +61,15 @@ cachedir={{ cachebasename }}/cachedir-{{ server }}
 
 
 {% if remotedelivery == "yes" %}
+{% if groups['datadelivery'] is defined %}
 {% for server in groups['datadelivery'] %}
 deliveryservice=http://{{ hostvars[server].ansible_host }}:{{remotedelivery_port}}/datadeliveryservice
 {% endfor %}
+{% else %}
+{% for server in groups['lrms_server' ] %}
+deliveryservice=http://{{ hostvars[server].ansible_host }}:{{remotedelivery_port}}/datadeliveryservice
+{% endfor %}
+{% endif %}
 {% endif %}
 
 
