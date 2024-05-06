@@ -98,7 +98,7 @@ lrms: "slurm"
 # If the path is different than the default /usr/bin - please update this value
 # Slurm installs on /usr/bin for RHEL derivatives
 # Slurm installs on /usr/local/bin for Debian 11
-lrms_bin_path: "{% if ansible_os_family == 'Debian' %}'/usr/local/bin'{% else %}'/usr/bin'{% endif %}"
+lrms_bin_path: "{% if ansible_os_family == 'Debian' %}/usr/local/bin{% else %}/usr/bin{% endif %}"
 
 
 ## queue
