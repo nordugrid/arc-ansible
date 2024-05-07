@@ -115,3 +115,8 @@ queues:
 # - yes
 # - no
 remotedelivery: "no"
+
+
+## time zone
+# See: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone: 'Europe/Oslo'

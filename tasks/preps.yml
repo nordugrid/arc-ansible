@@ -3,8 +3,9 @@
   when: ansible_os_family == "RedHat"
 
     
-- name: Set correct timezone
-  shell: timedatectl set-timezone Europe/Oslo
+- name: Set timezone to Europe/Oslo
+  community.general.timezone:
+    name: "{{timezone}}"
 
 
 - name: Install emacs, wget, development tools, epel-release  rhel

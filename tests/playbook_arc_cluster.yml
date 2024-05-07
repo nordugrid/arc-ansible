@@ -11,3 +11,4 @@
       sessionbasename: '/mnt/grid/sessiondir'
       cachebasename:   '/mnt/grid/cachedir'
       lrms:            'slurm'
+      timezone:        'Europe/Oslo'

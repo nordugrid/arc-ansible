@@ -27,6 +27,7 @@ Here is an example how on to use this role:
       sessionbasename: '/mnt/grid/sessiondir'
       cachebasename:   '/mnt/grid/cachedir'
       lrms:            'slurm'
+      timezone:        'Europe/Oslo'
 ```
 
 This example playbook is available in the `tests` folder.
