@@ -4,11 +4,11 @@
 [datadelivery:children]
 lrms_server
 
-[lrms_wns]
+[lrms_wn]
 <your-server-name> ansible_host=<your-server-ip>
 <your-server-name> ansible_host=<your-server-ip>
 
-[lrms_wns:vars]
+[lrms_wn:vars]
 ansible_ssh_common_args='-J cloudadm@<lrms_server-ip>'
 
 [all:vars]
