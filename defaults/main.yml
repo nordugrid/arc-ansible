@@ -96,7 +96,9 @@ lrms: "slurm"
 
 
 # If the path is different than the default /usr/bin - please update this value
-lrms_bin_path: "/usr/bin"
+# Slurm installs on /usr/bin for RHEL derivatives
+# Slurm installs on /usr/local/bin for Debian 11
+lrms_bin_path: "{% if ansible_os_family == 'Debian' %}/usr/local/bin{% else %}/usr/bin{% endif %}"
 
 
 ## queue
@@ -113,3 +115,8 @@ queues:
 # - yes
 # - no
 remotedelivery: "no"
+
+
+## time zone
+# See: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone: 'Europe/Oslo'

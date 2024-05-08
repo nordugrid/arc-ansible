@@ -26,8 +26,8 @@ Here is an example how on to use this role:
     - role: arc-ansible
       sessionbasename: '/mnt/grid/sessiondir'
       cachebasename:   '/mnt/grid/cachedir'
-      lrms_bin_path:   '/usr/local/bin'
       lrms:            'slurm'
+      timezone:        'Europe/Oslo'
 ```
 
 This example playbook is available in the `tests` folder.
@@ -139,7 +139,9 @@ Allowed values, see: http://www.nordugrid.org/arc/arc7/admins/reference.html#lrm
 
 
 ### lrms_bin_path
-It is assumed that the LRMS bin folder is `/usr/bin`. If that's not the case please update `lrms_bin_path` accordingly (e.g. `lrms_bin_path: /usr/local/bin`)
+It is assumed that the LRMS bin folder is `/usr/bin`. If that's not the case please update `lrms_bin_path` accordingly.
+For example, Debian 11 installs Slurm on `/usr/local/bin`. This is automatically configured in `defaults/main.yml` with
+jinja2, but for other Operating Systems it may differ and in that case you should set it manually.
 
 Allowed values, see: http://www.nordugrid.org/arc/arc7/admins/reference.html#lrms
 
