@@ -8,9 +8,9 @@
     name: "{{timezone}}"
 
 
-- name: Install emacs, wget, development tools, epel-release  rhel
+- name: Install wget, epel-release, and time for rhel
   package:
-    name: ['emacs', 'wget', '@Development tools', 'epel-release', 'time']
+    name: ['wget', 'epel-release', 'time']
     disablerepo: "nordugrid*"
     state: present
   when: (ansible_os_family == "RedHat") 
@@ -50,9 +50,9 @@
     - ansible_os_family == "Debian"
 
 
-- name: Install emacs, wget, ntp, gpg (deb)
+- name: Install wget, ntp, unattended-upgrades, gpg, and time for Debian
   package:
-    name: ['emacs', 'wget', 'ntp','unattended-upgrades', 'gpg', 'time']
+    name: ['wget', 'ntp','unattended-upgrades', 'gpg', 'time']
     state: present
   when:
     - ansible_os_family == "Debian"
@@ -78,6 +78,3 @@
   when:
     - ansible_os_family == "Debian"
     - ansible_distribution_major_version|int == 11
-
-
-
